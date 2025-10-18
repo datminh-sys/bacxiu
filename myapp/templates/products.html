@@ -1,0 +1,8 @@
+html
+
+<h2>Danh sách sản phẩm:</h2>
+<ul>
+  {% for p in products %}
+    <li>{{ p.name }} - {{ p.price }}</li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,11 @@
+html
+
+<h2>Sửa sản phẩm</h2>
+<form method="post">
+  {% csrf_token %}
+  Tên: <input name="name" value="{{ product.name }}"><br>
+  Giá: <input name="price" value="{{ product.price }}"><br>
+  <button type="submit">Cập nhật</button>
+</form>
+________________________________________
+4. DELETE – Xóa sản phẩm

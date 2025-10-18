@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bạc Xỉu Online - Django</title>
+  <style>
+    /* --- Reset & font --- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: radial-gradient(circle at 20% 20%, #1b2735, #090a0f);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      color: white;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff;
+      animation: glow 3s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff; }
+      to { text-shadow: 0 0 20px #00eaff, 0 0 40px #00eaff; }
+    }
+
+    a {
+      text-decoration: none;
+      font-size: 1.2rem;
+      padding: 15px 40px;
+      border-radius: 50px;
+      background: linear-gradient(45deg, #00eaff, #0084ff);
+      color: white;
+      font-weight: bold;
+      transition: 0.3s ease;
+      box-shadow: 0 0 15px #00eaff;
+    }
+
+    a:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px #00eaff, 0 0 50px #0084ff;
+    }
+
+    /* --- Hiệu ứng nền sao --- */
+    .stars {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: moveStars 20s linear infinite;
+    }
+
+    @keyframes moveStars {
+      from { transform: translateY(0); }
+      to { transform: translateY(100vh); }
+    }
+  </style>
+</head>
+<body>
+  <h1>✨ Chào mừng đến với Tạc Xỉu Online ✨</h1>
+  <a href="{% url 'dashboard' %}">Vào chơi ngay</a>
+
+  <!-- Hiệu ứng sao băng -->
+  <script>
+    const body = document.body;
+    for (let i = 0; i < 50; i++) {
+      const star = document.createElement('div');
+      star.classList.add('stars');
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.animationDuration = (10 + Math.random() * 10) + 's';
+      star.style.opacity = Math.random();
+      body.appendChild(star);
+    }
+  </script>
+</body>
+</html>

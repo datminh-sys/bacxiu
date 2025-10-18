@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>App Tài Xỉu - ONCMC</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#ffb86b;--muted:#9aa4b2;--glass: rgba(255,255,255,0.03)}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;color:#e6eef8;background:linear-gradient(180deg,#071020 0%, #071825 100%);}
+    .wrap{max-width:980px;margin:28px auto;padding:20px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    h1{font-size:20px;margin:0;color:var(--accent)}
+    .powered{width:100%;font-size:13px;color:var(--muted);margin-top:4px;text-align:left}
+    .controls{display:flex;gap:12px;align-items:center}
+    .card{background:var(--card);padding:14px;border-radius:12px;min-width:220px}
+    .balance{font-weight:700;font-size:18px}
+    .game{display:flex;gap:18px;margin-top:18px;align-items:flex-start;position:relative;overflow:hidden}
+    .left{flex:1}
+    .right{width:300px}
+    .dice-area{display:flex;gap:12px;justify-content:center;padding:18px;background:var(--glass);border-radius:12px;position:relative}
+    .dice{width:90px;height:90px;border-radius:12px;background:#ffffff;display:grid;place-items:center;font-size:28px;font-weight:700;color:#0b1220;box-shadow:0 6px 18px rgba(2,6,23,0.5);position:relative}
+    .dice .pips{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);width:76%;height:76%}
+    .pip{width:12px;height:12px;border-radius:50%;background:#0b1220;opacity:0}
+    .face-1 .pip:nth-child(5){opacity:1}
+    .face-2 .pip:nth-child(1), .face-2 .pip:nth-child(9){opacity:1}
+    .face-3 .pip:nth-child(1), .face-3 .pip:nth-child(5), .face-3 .pip:nth-child(9){opacity:1}
+    .face-4 .pip:nth-child(1), .face-4 .pip:nth-child(3), .face-4 .pip:nth-child(7), .face-4 .pip:nth-child(9){opacity:1}
+    .face-5 .pip:nth-child(1), .face-5 .pip:nth-child(3), .face-5 .pip:nth-child(5), .face-5 .pip:nth-child(7), .face-5 .pip:nth-child(9){opacity:1}
+    .face-6 .pip:nth-child(1), .face-6 .pip:nth-child(3), .face-6 .pip:nth-child(4), .face-6 .pip:nth-child(6), .face-6 .pip:nth-child(7), .face-6 .pip:nth-child(9){opacity:1}
+    .spin{animation:spin 800ms cubic-bezier(.2,.9,.3,1)}
+    @keyframes spin{0%{transform:rotateX(0) rotateY(0) scale(1)}50%{transform:rotateX(720deg) rotateY(360deg) scale(1.06)}100%{transform:rotateX(0) rotateY(0) scale(1)}}
+    .bet-row{display:flex;gap:8px;align-items:center;margin-top:12px}
+    input[type=number]{width:120px;padding:8px;border-radius:8px;border:0;background:#071427;color:#e6eef8}
+    button{padding:10px 14px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--accent),#ffd7a0);cursor:pointer;font-weight:600}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+    .history{margin-top:16px;background:var(--card);padding:10px;border-radius:10px;max-height:260px;overflow:auto}
+    table{width:100%;border-collapse:collapse;color:#cfe8ff}
+    td,th{padding:6px 8px;font-size:13px}
+    th{color:var(--muted);text-align:left;font-weight:600}
+    .result{margin-top:12px;padding:12px;border-radius:10px;background:linear-gradient(90deg, rgba(255,184,107,0.06), rgba(255,255,255,0.01));font-weight:700}
+    .chip{position:absolute;width:50px;height:50px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #ffdca0, #ffb86b);display:grid;place-items:center;color:#111;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,0.5);animation:chipFall 1.2s ease forwards;pointer-events:none}
+    @keyframes chipFall{0%{transform:translateY(-100px) scale(0.8);opacity:0}60%{transform:translateY(30px) scale(1.1);opacity:1}100%{transform:translateY(0) scale(1);opacity:1}}
+    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+    @media (max-width:760px){.game{flex-direction:column}.right{width:100%}}
+  </style>
+</head>
+<body>
+  <div style="position: fixed; top: 10px; left: 20px; right: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999;">
+  <div id="clock" style="color:#9aa4b2;font-size:14px;"></div>
+  <form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit" style="background:#ffb86b; border:none; padding:6px 14px; border-radius:8px; color:#000; font-weight:600; cursor:pointer; transition:0.2s;" onmouseover="this.style.opacity=0.85" onmouseout="this.style.opacity=1">Đăng xuất</button>
+  </form>
+</div>
+
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Tài Xỉu</h1>
+        <div class="powered">Tài khoản hiện tại:  {{ request.user.username }}</div>
+        <div style="color:var(--muted);font-size:13px">Luật: 3 xúc xắc, tổng 4-10 = Xỉu, 11-17 = Tài.</div>
+      </div>
+      <div class="controls">
+        <div class="card">
+          <div style="font-size:12px;color:var(--muted)">Số dư</div>
+          <div class="balance" id="balance">Đang tải...</div>
+        </div>
+        <div class="card">
+          <div style="font-size:12px;color:var(--muted)">Nạp xu</div>
+          <input type="number" id="depositAmount" value="500" min="1">
+          <button class="btn-ghost" id="depositBtn">Nạp</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="game" id="gameArea">
+      <div class="left">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-size:13px;color:var(--muted)">Chọn cửa</div>
+              <div style="margin-top:6px;display:flex;gap:8px">
+                <label><input type="radio" name="choice" value="tai" checked> Tài</label>
+                <label><input type="radio" name="choice" value="xiu"> Xỉu</label>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:13px;color:var(--muted)">Số tiền</div>
+              <input type="number" id="bet" value="100" min="1">
+            </div>
+          </div>
+
+          <div class="bet-row">
+            <button id="rollBtn">Quăng xúc xắc</button>
+            <button class="btn-ghost" id="minBet">+10</button>
+            <button class="btn-ghost" id="maxBet">x2</button>
+            <button class="btn-ghost" id="resetBtn">Reset</button>
+          </div>
+
+          <div class="result" id="out">Chưa chơi — chúc may mắn!</div>
+        </div>
+
+        <div class="history" id="history">
+          <table>
+            <thead><tr><th>#</th><th>Chọn</th><th>Cược</th><th>Kết quả</th><th>Thắng (+/-)</th></tr></thead>
+            <tbody id="histBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="card" style="text-align:center">
+          <div style="color:var(--muted);font-size:13px">Xúc xắc</div>
+          <div class="dice-area" id="diceArea">
+            <div class="dice face-1" id="d1"><div class="pips"><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></div></div>
+            <div class="dice face-1" id="d2"><div class="pips"><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></div></div>
+            <div class="dice face-1" id="d3"><div class="pips"><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></div></div>
+          </div>
+          <div style="margin-top:10px;color:var(--muted);font-size:13px">Tổng: <span id="total">—</span></div>
+        </div>
+        <div style="height:12px"></div>
+        <div class="card">
+          <div style="font-size:13px;color:var(--muted)">Lịch sử nhanh</div>
+          <div id="quick" style="margin-top:8px;color:#cfe8ff;min-height:40px"></div>
+        </div>
+      </div>
+    </div>
+    <footer>App demo — Hoàng Sa, Trường Sa là của Viêt Nam.</footer>
+    <footer>Powered by IdonKnow.</footer>
+  </div>
+
+<script>
+(async function(){
+  // --- Các biến và element ---
+  const balanceEl = document.getElementById('balance');
+  const betEl = document.getElementById('bet');
+  const rollBtn = document.getElementById('rollBtn');
+  const out = document.getElementById('out');
+  const histBody = document.getElementById('histBody');
+  const quick = document.getElementById('quick');
+  const totalEl = document.getElementById('total');
+  const diceEls = [document.getElementById('d1'), document.getElementById('d2'), document.getElementById('d3')];
+  const depositBtn = document.getElementById('depositBtn');
+  const depositAmount = document.getElementById('depositAmount');
+  const gameArea = document.getElementById('gameArea');
+
+  const diceSound = new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_6d67b6b3e8.mp3?filename=dice-rolling-1-101613.mp3');
+  const chipSound = new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_ee0d9b1cb5.mp3?filename=coin-drop-1-104157.mp3');
+
+  // --- Biến trạng thái game (lấy từ server) ---
+  let balance = 0;
+  let history = [];
+
+  // --- Hàm tiện ích CSRF Token ---
+  function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+  }
+  const csrftoken = getCookie('csrftoken');
+
+
+  // --- Các hàm render và logic game (tương tự code cũ) ---
+  function renderBalance(){ balanceEl.textContent = balance.toString(); }
+  function renderHistory(){ 
+    histBody.innerHTML = history.slice().reverse().map((h,i)=>
+      `<tr><td>${history.length-i}</td><td>${h.choice}</td><td>${h.bet}</td><td>${h.total} (${h.dice.join(',')})</td><td>${h.win>0?'+':''}${h.win}</td></tr>`
+    ).join(''); 
+    quick.textContent = history.slice(-6).map(h=>`${h.choice} ${h.win>0?'+':''}${h.win}`).join(' • '); 
+  }
+
+  function rollDice(){ return [rand1to6(), rand1to6(), rand1to6()]; }
+  function rand1to6(){ return Math.floor(Math.random()*6)+1 }
+  function faceClass(n){ return 'face-'+n }
+  
+  function spawnChip(amount){
+    const chip = document.createElement('div');
+    chip.className='chip';
+    chip.textContent=amount;
+    chip.style.left=Math.random()*200+200+'px';
+    chip.style.top='0px';
+    gameArea.appendChild(chip);
+    chipSound.play();
+    setTimeout(()=>chip.remove(),1200);
+  }
+
+  // --- [THAY ĐỔI LỚN] Hàm save() giờ sẽ gửi dữ liệu lên server ---
+  async function save(){
+    try {
+      await fetch("{% url 'game_data_api' %}", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify({ balance: balance, history: history })
+      });
+    } catch (error) {
+      console.error("Lỗi khi lưu dữ liệu:", error);
+      out.textContent = "Lỗi: Không thể lưu dữ liệu lên server.";
+    }
+  }
+  
+  // --- [THAY ĐỔI LỚN] Hàm loadData() để lấy dữ liệu từ server khi tải trang ---
+  async function loadData() {
+    try {
+      const response = await fetch("{% url 'game_data_api' %}");
+      const data = await response.json();
+      balance = data.balance;
+      history = data.history;
+      renderBalance();
+      renderHistory();
+    } catch (error) {
+      console.error("Lỗi khi tải dữ liệu:", error);
+      balanceEl.textContent = "Lỗi";
+      out.textContent = "Lỗi: Không thể tải dữ liệu từ server.";
+    }
+  }
+
+
+  // --- Event Listeners (hầu hết giữ nguyên, chỉ gọi hàm save() đã được cập nhật) ---
+  depositBtn.addEventListener('click', async () => {
+    const amount = Math.floor(Number(depositAmount.value)||0);
+    if(amount>0){ 
+      balance += amount; 
+      await save(); // Lưu trạng thái mới
+      renderBalance(); 
+      out.textContent = `Đã nạp ${amount} xu!`; 
+      chipSound.play(); 
+    }
+  });
+
+  document.getElementById('minBet').addEventListener('click',()=>{ betEl.value = Number(betEl.value||0)+10 });
+  document.getElementById('maxBet').addEventListener('click',()=>{ betEl.value = Math.max(1, Number(betEl.value||1)*2) });
+  document.getElementById('resetBtn').addEventListener('click', async () => { 
+    if(confirm('Reset số dư về 1000?')){ 
+      balance=1000; 
+      history=[]; 
+      await save(); // Lưu trạng thái đã reset
+      renderBalance(); 
+      renderHistory(); 
+      out.textContent='Đã reset.' 
+    } 
+  });
+
+  rollBtn.addEventListener('click', () => {
+    const bet = Math.floor(Number(betEl.value)||0);
+    if(bet<=0){ alert('Nhập số tiền cược hợp lệ (>0)'); return }
+    if(bet>balance){ alert('Không đủ tiền trong tài khoản'); return }
+    const choice = document.querySelector('input[name="choice"]:checked').value;
+
+    spawnChip(bet);
+    diceSound.play();
+    diceEls.forEach(d=>{ d.classList.add('spin'); d.className = 'dice' });
+    out.textContent = 'Quăng...';
+    rollBtn.disabled = true; // Vô hiệu hóa nút khi đang quay
+
+    setTimeout(async () => {
+      const dice = rollDice();
+      const total = dice.reduce((a,b)=>a+b,0);
+      diceEls.forEach((el,i)=>{ el.className = 'dice '+faceClass(dice[i]); el.classList.remove('spin') });
+      totalEl.textContent = total;
+
+      let result = (total>=11 && total<=17)?'tai':'xiu';
+      let win = 0;
+      if(choice===result){ win = bet; balance += win; out.textContent = `Bạn thắng! +${win} (Tổng ${total})`; }
+      else { win = -bet; balance += win; out.textContent = `Bạn thua! ${win} (Tổng ${total})`; }
+
+      history.push({time: Date.now(), choice, bet, dice, total, win});
+      
+      // Sau khi có kết quả, lưu lại server
+      await save(); 
+      
+      renderBalance(); 
+      renderHistory();
+      rollBtn.disabled = false; // Bật lại nút
+    }, 900);
+  });
+
+  // --- Khởi chạy game ---
+  await loadData(); // Tải dữ liệu của người dùng khi trang được mở
+
+})();
+</script>
+<script>
+// Script đồng hồ giữ nguyên
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2, '0');
+  const m = String(now.getMinutes()).padStart(2, '0');
+  const s = String(now.getSeconds()).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  const mo = String(now.getMonth() + 1).padStart(2, '0');
+  const y = now.getFullYear();
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  document.getElementById('clock').innerHTML = `<div>${h}:${m}:${s}</div><div style="font-size:12px; color:#9aa4b2;">${d}/${mo}/${y} — ${tz}</div>`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+</script>
+</body>
+</html>

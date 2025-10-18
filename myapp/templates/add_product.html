@@ -1,0 +1,9 @@
+html
+
+<h2>Thêm sản phẩm</h2>
+<form method="post">
+  {% csrf_token %}
+  Tên sản phẩm: <input name="name"><br>
+  Giá: <input name="price"><br>
+  <button type="submit">Thêm</button>
+</form>

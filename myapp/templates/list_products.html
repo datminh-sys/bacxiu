@@ -1,0 +1,10 @@
+<h2>Danh sách sản phẩm</h2>
+<a href="{% url 'add_product' %}">+ Thêm sản phẩm</a>
+<ul>
+  {% for p in products %}
+    <li>{{ p.name }} - {{ p.price }} 
+      <a href="{% url 'edit_product' p.id %}">Sửa</a> | 
+      <a href="{% url 'delete_product' p.id %}">Xóa</a>
+    </li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,11 @@
+
+
+<h2>Xác nhận xóa</h2>
+<p>Bạn có chắc chắn muốn xóa sản phẩm "{{ product.name }}"?</p>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Xóa</button>
+  <a href="{% url 'list_products' %}">Hủy</a>
+</form>
+
+
