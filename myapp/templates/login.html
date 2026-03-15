@@ -3,103 +3,171 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Đăng nhập</title>
+  <title>TRUY CẬP HỆ THỐNG - PHÂN QUYỀN MỨC 5</title>
   <style>
+    :root {
+      --primary-color: #00ff41; /* Màu xanh Matrix */
+      --bg-color: #0a0a0a;
+      --border-glow: 0 0 10px rgba(0, 255, 65, 0.5);
+    }
+
     body {
       margin: 0;
       height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      font-family: 'Segoe UI', sans-serif;
-      color: #fff;
+      background-color: var(--bg-color);
+      background-image: 
+        linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
+      background-size: 20px 20px; /* Hiệu ứng lưới tọa độ */
+      font-family: 'Courier New', Courier, monospace;
+      color: var(--primary-color);
+      overflow: hidden;
+    }
+
+    /* Hiệu ứng nhiễu (Scanline) */
+    body::before {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                  linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      z-index: 2;
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none;
     }
 
     .login-box {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(15px);
-      border-radius: 20px;
-      padding: 40px 35px;
-      width: 340px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      animation: fadeIn 0.6s ease-in-out;
+      position: relative;
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid var(--primary-color);
+      padding: 30px;
+      width: 380px;
+      box-shadow: var(--border-glow);
+      z-index: 3;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* Góc trang trí kiểu radar */
+    .login-box::after {
+      content: "[ AUTHORIZED PERSONNEL ONLY ]";
+      position: absolute;
+      top: -25px;
+      left: 0;
+      font-size: 12px;
+      letter-spacing: 2px;
     }
 
     h2 {
-      margin-bottom: 25px;
-      font-weight: 600;
-      font-size: 24px;
-      letter-spacing: 0.5px;
+      margin-top: 0;
+      margin-bottom: 30px;
+      font-size: 20px;
+      text-transform: uppercase;
+      text-align: center;
+      border-bottom: 1px solid var(--primary-color);
+      padding-bottom: 10px;
+      text-shadow: var(--border-glow);
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+      position: relative;
     }
 
     input {
       width: 100%;
-      padding: 12px 15px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.2);
-      color: #fff;
-      font-size: 15px;
+      box-sizing: border-box;
+      padding: 12px;
+      background: #000;
+      border: 1px solid #003b00;
+      color: var(--primary-color);
+      font-family: inherit;
       outline: none;
-      transition: 0.3s;
+      transition: all 0.3s;
     }
 
     input:focus {
-      background: rgba(255,255,255,0.3);
+      border-color: var(--primary-color);
+      box-shadow: inset 0 0 5px var(--primary-color);
+    }
+
+    input::placeholder {
+      color: #003b00;
     }
 
     button {
-      margin-top: 15px;
       width: 100%;
       padding: 12px;
+      background: var(--primary-color);
+      color: #000;
       border: none;
-      border-radius: 10px;
-      background: #5a67d8;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 600;
+      font-family: inherit;
+      font-weight: bold;
+      text-transform: uppercase;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: 0.3s;
     }
 
     button:hover {
-      background: #434190;
+      background: #000;
+      color: var(--primary-color);
+      box-shadow: 0 0 15px var(--primary-color);
+      outline: 1px solid var(--primary-color);
+    }
+
+    .footer-links {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 13px;
     }
 
     a {
-      color: #e2e8f0;
+      color: var(--primary-color);
       text-decoration: none;
-      display: inline-block;
-      margin-top: 15px;
-      font-size: 14px;
-      transition: color 0.3s;
+      opacity: 0.7;
     }
 
     a:hover {
-      color: #fff;
+      opacity: 1;
       text-decoration: underline;
+    }
+
+    /* Hiệu ứng nhấp nháy con trỏ */
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 15px;
+      background: var(--primary-color);
+      animation: blink 0.8s infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
     }
   </style>
 </head>
 <body>
 
   <div class="login-box">
-    <h2>Đăng nhập</h2>
+    <h2>> ĐĂNG NHẬP <span class="cursor"></span></h2>
     <form method="post">
       {% csrf_token %}
-      <input name="username" placeholder="Tài khoản" required><br>
-      <input type="password" name="password" placeholder="Mật khẩu" required><br>
-      <button type="submit">Đăng nhập</button>
+      <div class="input-group">
+        <input name="username" placeholder="USER_ID" required autocomplete="off">
+      </div>
+      <div class="input-group">
+        <input type="password" name="password" placeholder="ACCESS_CODE" required>
+      </div>
+      <button type="submit">Xác thực danh tính</button>
     </form>
-    <a href="{% url 'register' %}">Chưa có tài khoản? Đăng ký</a>
+    
+    <div class="footer-links">
+      <a href="{% url 'register' %}">Yêu cầu cấp quyền truy cập (Đăng ký)</a>
+    </div>
   </div>
 
 </body>
