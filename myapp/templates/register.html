@@ -3,103 +3,197 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Đăng ký</title>
+  <title>INITIALIZE NEW AGENT - DATABASE ACCESS</title>
   <style>
+    :root {
+      --primary-color: #00d4ff; /* Xanh điện tử */
+      --bg-color: #050505;
+      --glow: 0 0 12px rgba(0, 212, 255, 0.4);
+    }
+
     body {
       margin: 0;
       height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      font-family: 'Segoe UI', sans-serif;
-      color: #fff;
+      background-color: var(--bg-color);
+      /* Hiệu ứng lưới không gian */
+      background-image: 
+        radial-gradient(circle at 50% 50%, #1a1a1a 0%, #050505 100%),
+        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 30px 30px, 30px 30px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      color: var(--primary-color);
+      overflow: hidden;
+    }
+
+    /* Hiệu ứng quét dòng (Scanline) */
+    body::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.1),
+        rgba(0, 0, 0, 0.1) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 10;
     }
 
     .register-box {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(15px);
-      border-radius: 20px;
-      padding: 40px 35px;
-      width: 340px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      animation: fadeIn 0.6s ease-in-out;
+      background: rgba(0, 10, 20, 0.9);
+      border: 1px solid var(--primary-color);
+      padding: 40px;
+      width: 360px;
+      position: relative;
+      box-shadow: var(--glow), inset 0 0 20px rgba(0, 212, 255, 0.1);
+      animation: terminalOpen 0.4s ease-out;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes terminalOpen {
+      from { transform: scaleY(0); opacity: 0; }
+      to { transform: scaleY(1); opacity: 1; }
+    }
+
+    /* Thanh tiêu đề giả lập cửa sổ console */
+    .terminal-header {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 25px;
+      background: var(--primary-color);
+      color: #000;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      font-weight: bold;
     }
 
     h2 {
-      margin-bottom: 25px;
-      font-weight: 600;
-      font-size: 24px;
-      letter-spacing: 0.5px;
+      margin: 20px 0 30px;
+      font-size: 1.4rem;
+      text-transform: uppercase;
+      text-align: center;
+      letter-spacing: 3px;
+      text-shadow: var(--glow);
+    }
+
+    .input-wrapper {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .input-wrapper::before {
+      content: ">";
+      position: absolute;
+      left: -15px;
+      top: 12px;
+      font-weight: bold;
     }
 
     input {
       width: 100%;
-      padding: 12px 15px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.2);
+      box-sizing: border-box;
+      padding: 12px 10px;
+      background: transparent;
+      border: 1px solid rgba(0, 212, 255, 0.3);
       color: #fff;
-      font-size: 15px;
+      font-family: inherit;
       outline: none;
       transition: 0.3s;
     }
 
     input:focus {
-      background: rgba(255,255,255,0.3);
+      border-color: var(--primary-color);
+      background: rgba(0, 212, 255, 0.05);
+      box-shadow: inset 0 0 8px rgba(0, 212, 255, 0.2);
     }
 
     button {
-      margin-top: 15px;
       width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      background: #48bb78;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 600;
+      padding: 14px;
+      margin-top: 10px;
+      background: transparent;
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+      font-family: inherit;
+      font-weight: bold;
+      text-transform: uppercase;
       cursor: pointer;
-      transition: background 0.3s;
+      position: relative;
+      overflow: hidden;
+      transition: 0.4s;
     }
 
     button:hover {
-      background: #2f855a;
+      background: var(--primary-color);
+      color: #000;
+      box-shadow: 0 0 20px var(--primary-color);
+    }
+
+    .status-text {
+      font-size: 10px;
+      margin-top: 15px;
+      text-align: left;
+      opacity: 0.6;
+      line-height: 1.5;
     }
 
     a {
-      color: #e2e8f0;
+      color: var(--primary-color);
       text-decoration: none;
-      display: inline-block;
-      margin-top: 15px;
-      font-size: 14px;
-      transition: color 0.3s;
+      display: block;
+      margin-top: 25px;
+      text-align: center;
+      font-size: 12px;
+      transition: 0.3s;
     }
 
     a:hover {
-      color: #fff;
       text-decoration: underline;
+      text-shadow: var(--glow);
+    }
+
+    /* Hiệu ứng nhấp nháy cho text */
+    .blink {
+      animation: blinker 1.5s linear infinite;
+    }
+
+    @keyframes blinker {
+      50% { opacity: 0; }
     }
   </style>
 </head>
 <body>
 
   <div class="register-box">
-    <h2>Đăng ký</h2>
+    <div class="terminal-header">SYSTEM_CORE: CREATE_USER_NODE</div>
+    
+    <h2>INITIALIZE <span class="blink">_</span></h2>
+    
     <form method="post">
       {% csrf_token %}
-      <input name="username" placeholder="Tài khoản" required><br>
-      <input type="password" name="password" placeholder="Mật khẩu" required><br>
-      <button type="submit">Đăng ký</button>
+      <div class="input-wrapper">
+        <input name="username" placeholder="SET_USERNAME" required autocomplete="off">
+      </div>
+      <div class="input-wrapper">
+        <input type="password" name="password" placeholder="SET_ENCRYPTION_KEY" required>
+      </div>
+      
+      <div class="status-text">
+        [SYS] : Đang kiểm tra tính khả dụng của tài khoản...<br>
+        [SYS] : Yêu cầu độ dài mật khẩu tối thiểu 8 ký tự.
+      </div>
+
+      <button type="submit">Khởi tạo hồ sơ</button>
     </form>
-    <a href="{% url 'login' %}">Đã có tài khoản? Đăng nhập</a>
+
+    <a href="{% url 'login' %}">>> TRUY CẬP TÀI KHOẢN HIỆN CÓ <<</a>
   </div>
 
 </body>
