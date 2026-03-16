@@ -3,87 +3,188 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bạc Xỉu Online - Django</title>
+  <title>TERMINAL ACCESS // AUTHORIZATION REQUIRED</title>
   <style>
-    /* --- Reset & font --- */
+    :root {
+      --primary-color: #00ff41;
+      --bg-color: #000;
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: "Poppins", sans-serif;
+      font-family: 'Courier New', Courier, monospace;
     }
 
     body {
       height: 100vh;
-      background: radial-gradient(circle at 20% 20%, #1b2735, #090a0f);
+      background-color: var(--bg-color);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       overflow: hidden;
-      color: white;
+      color: var(--primary-color);
+    }
+
+    /* Hiệu ứng màng lọc màn hình cũ */
+    body::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                  linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+      background-size: 100% 3px, 3px 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      opacity: 0.3;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 40px;
+      border: 1px solid var(--primary-color);
+      box-shadow: 0 0 20px var(--primary-color);
+    }
+
+    .status-code {
+      font-size: 12px;
+      letter-spacing: 5px;
+      margin-bottom: 10px;
+      opacity: 0.7;
     }
 
     h1 {
-      font-size: 2.8rem;
+      font-size: 2rem;
       margin-bottom: 30px;
-      text-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff;
-      animation: glow 3s infinite alternate;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border-right: 3px solid var(--primary-color);
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 2s steps(30, end) forwards, blink-caret 0.75s step-end infinite;
     }
 
-    @keyframes glow {
-      from { text-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff; }
-      to { text-shadow: 0 0 20px #00eaff, 0 0 40px #00eaff; }
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
     }
 
-    a {
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: var(--primary-color) }
+    }
+
+    .btn-access {
+      display: inline-block;
       text-decoration: none;
       font-size: 1.2rem;
-      padding: 15px 40px;
-      border-radius: 50px;
-      background: linear-gradient(45deg, #00eaff, #0084ff);
-      color: white;
+      padding: 15px 50px;
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
       font-weight: bold;
+      text-transform: uppercase;
       transition: 0.3s ease;
-      box-shadow: 0 0 15px #00eaff;
+      position: relative;
+      overflow: hidden;
     }
 
-    a:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 25px #00eaff, 0 0 50px #0084ff;
+    .btn-access:hover {
+      background: var(--primary-color);
+      color: #000;
+      box-shadow: 0 0 30px var(--primary-color);
     }
 
-    /* --- Hiệu ứng nền sao --- */
-    .stars {
+    .warning-msg {
+      margin-top: 25px;
+      font-size: 10px;
+      color: #ff3e3e;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Hiệu ứng khung ngắm (Scanner) */
+    .scanner-corners {
       position: absolute;
-      width: 2px;
-      height: 2px;
-      background: white;
-      border-radius: 50%;
-      animation: moveStars 20s linear infinite;
-    }
-
-    @keyframes moveStars {
-      from { transform: translateY(0); }
-      to { transform: translateY(100vh); }
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+      border: 1px solid rgba(0, 255, 65, 0.1);
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
-  <h1>✨ Chào mừng đến với Bạc Xỉu Online ✨</h1>
-  <a href="{% url 'dashboard' %}">Vào chơi ngay</a>
 
-  <!-- Hiệu ứng sao băng -->
+  <canvas id="matrix"></canvas>
+
+  <div class="content">
+    <div class="status-code">ID_NODE: 09-ONCMC-SYS</div>
+    <h1>> TRUY CẬP HỆ THỐNG...</h1>
+    
+    <a href="{% url 'dashboard' %}" class="btn-access">
+      Xác thực quyền
+    </a>
+
+    <div class="warning-msg">
+      Cảnh báo: Mọi hoạt động đang được ghi lại bởi cơ quan an ninh mạng.
+    </div>
+  </div>
+
   <script>
-    const body = document.body;
-    for (let i = 0; i < 50; i++) {
-      const star = document.createElement('div');
-      star.classList.add('stars');
-      star.style.left = Math.random() * 100 + 'vw';
-      star.style.animationDuration = (10 + Math.random() * 10) + 's';
-      star.style.opacity = Math.random();
-      body.appendChild(star);
+    // Hiệu ứng Matrix Rain
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%";
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+
+    for (let i = 0; i < columns; i++) {
+      drops[i] = 1;
     }
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#00ff41";
+      ctx.font = fontSize + "px Courier New";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 50);
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
   </script>
 </body>
 </html>
