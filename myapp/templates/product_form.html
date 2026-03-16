@@ -1,5 +1,148 @@
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Lưu</button>
-</form>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ENCRYPTED_DATA_INPUT</title>
+  <style>
+    :root {
+      --primary-color: #00ff41; /* Matrix Green */
+      --bg-dark: #050505;
+      --input-bg: rgba(0, 50, 0, 0.2);
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--primary-color);
+      font-family: 'Consolas', 'Courier New', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background-image: radial-gradient(circle, #0a1a0a 1px, transparent 1px);
+      background-size: 25px 25px;
+    }
+
+    /* Thùng chứa Form */
+    .form-container {
+      width: 450px;
+      border: 1px solid var(--primary-color);
+      padding: 35px;
+      background: rgba(0, 0, 0, 0.9);
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+      position: relative;
+    }
+
+    /* Hiệu ứng thanh quét Scanner */
+    .form-container::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 2px;
+      background: var(--primary-color);
+      box-shadow: 0 0 15px var(--primary-color);
+      animation: scan 3s linear infinite;
+      opacity: 0.5;
+    }
+
+    @keyframes scan {
+      0% { top: 0; }
+      100% { top: 100%; }
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-top: 0;
+      border-bottom: 1px solid var(--primary-color);
+      padding-bottom: 10px;
+      margin-bottom: 25px;
+    }
+
+    /* Tùy chỉnh các thẻ <p> sinh ra bởi {{ form.as_p }} */
+    form p {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Tùy chỉnh Label (Tên trường) */
+    form label {
+      font-size: 11px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: rgba(0, 255, 65, 0.7);
+    }
+
+    /* Tùy chỉnh Input, Select, Textarea sinh ra bởi Django */
+    form input, form select, form textarea {
+      background: var(--input-bg);
+      border: 1px solid #003b00;
+      padding: 12px;
+      color: #fff;
+      font-family: inherit;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    form input:focus {
+      border-color: var(--primary-color);
+      background: rgba(0, 255, 65, 0.05);
+      box-shadow: inset 0 0 10px rgba(0, 255, 65, 0.2);
+    }
+
+    /* Tùy chỉnh nút Lưu */
+    button[type="submit"] {
+      width: 100%;
+      padding: 15px;
+      background: var(--primary-color);
+      color: #000;
+      border: none;
+      font-family: inherit;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 10px;
+      letter-spacing: 2px;
+      transition: 0.3s;
+    }
+
+    button[type="submit"]:hover {
+      background: #fff;
+      box-shadow: 0 0 20px #fff;
+    }
+
+    /* Thông báo lỗi nếu có */
+    .errorlist {
+      color: #ff3e3e;
+      list-style: none;
+      padding: 0;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>>_ GIAO_THỨC_NẠP_DỮ_LIỆU</h2>
+    
+    <form method="post">
+      {% csrf_token %}
+      
+      {# Django sẽ render toàn bộ các trường vào đây #}
+      {{ form.as_p }}
+
+      <button type="submit">XÁC NHẬN LƯU (COMMIT)</button>
+    </form>
+
+    <div style="margin-top: 20px; font-size: 10px; opacity: 0.5;">
+      [STATUS]: WAITING_FOR_USER_INPUT... <br>
+      [AUTH]: LEVEL_4_REQUIRED
+    </div>
+  </div>
+
+</body>
+</html>
+
