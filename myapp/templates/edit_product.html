@@ -1,11 +1,138 @@
-html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DATA OVERRIDE - SECTOR 7</title>
+  <style>
+    :root {
+      --primary-color: #ffb400; /* Màu vàng Amber */
+      --bg-color: #0d0d0d;
+      --input-bg: rgba(255, 180, 0, 0.05);
+    }
 
-<h2>Sửa sản phẩm</h2>
-<form method="post">
-  {% csrf_token %}
-  Tên: <input name="name" value="{{ product.name }}"><br>
-  Giá: <input name="price" value="{{ product.price }}"><br>
-  <button type="submit">Cập nhật</button>
-</form>
-________________________________________
-4. DELETE – Xóa sản phẩm
+    body {
+      background-color: var(--bg-color);
+      color: var(--primary-color);
+      font-family: 'Consolas', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    /* Hiệu ứng nhiễu màn hình nền */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+                  repeating-linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.01));
+      background-size: 100% 4px, 3px 100%;
+      z-index: -1;
+    }
+
+    .edit-container {
+      width: 400px;
+      border: 2px solid var(--primary-color);
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.9);
+      box-shadow: 0 0 20px rgba(255, 180, 0, 0.2);
+      position: relative;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.3rem;
+      text-align: center;
+      border-bottom: 1px double var(--primary-color);
+      padding-bottom: 15px;
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      font-size: 10px;
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      background: var(--input-bg);
+      border: 1px solid var(--primary-color);
+      padding: 12px;
+      color: #fff;
+      font-family: inherit;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      background: rgba(255, 180, 0, 0.15);
+      box-shadow: 0 0 10px var(--primary-color);
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      background: var(--primary-color);
+      color: #000;
+      border: none;
+      font-family: inherit;
+      font-weight: bold;
+      cursor: pointer;
+      letter-spacing: 2px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #fff;
+      box-shadow: 0 0 15px #fff;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: var(--primary-color);
+      text-decoration: none;
+      font-size: 11px;
+      opacity: 0.6;
+    }
+
+    .back-link:hover { opacity: 1; }
+  </style>
+</head>
+<body>
+
+  <div class="edit-container">
+    <h2>[ GHI ĐÈ DỮ LIỆU TÀI SẢN ]</h2>
+    
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label>ĐỊNH DANH ĐỐI TƯỢNG (NAME):</label>
+        <input name="name" value="{{ product.name }}" autocomplete="off" required>
+      </div>
+
+      <div class="form-group">
+        <label>GIÁ TRỊ NIÊM YẾT (PRICE):</label>
+        <input name="price" value="{{ product.price }}" required>
+      </div>
+
+      <button type="submit">XÁC NHẬN THAY ĐỔI</button>
+    </form>
+
+    <a href="{% url 'product_list' %}" class="back-link"><< HỦY THAO TÁC</a>
+  </div>
+
+</body>
+</html>
