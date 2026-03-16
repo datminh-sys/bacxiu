@@ -1,9 +1,176 @@
-html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DATABASE ENTRY - NEW ASSET</title>
+  <style>
+    :root {
+      --primary-color: #00ff41;
+      --secondary-color: #008f11;
+      --bg-color: #050505;
+      --input-glow: 0 0 15px rgba(0, 255, 65, 0.2);
+    }
 
-<h2>Thêm sản phẩm</h2>
-<form method="post">
-  {% csrf_token %}
-  Tên sản phẩm: <input name="name"><br>
-  Giá: <input name="price"><br>
-  <button type="submit">Thêm</button>
-</form>
+    body {
+      background-color: var(--bg-color);
+      color: var(--primary-color);
+      font-family: 'Consolas', 'Courier New', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    /* Hiệu ứng tia chớp dữ liệu chạy qua */
+    body::before {
+      content: "";
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(transparent, rgba(0, 255, 65, 0.05), transparent);
+      animation: data-stream 5s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes data-stream {
+      to { top: 100%; }
+    }
+
+    .add-container {
+      width: 420px;
+      border: 1px solid var(--primary-color);
+      padding: 40px;
+      background: rgba(0, 5, 0, 0.9);
+      box-shadow: var(--input-glow);
+      position: relative;
+    }
+
+    /* Chi tiết góc trang trí */
+    .add-container::before {
+      content: "ENTRY_FORM_v2.0.4";
+      position: absolute;
+      top: -10px;
+      right: 15px;
+      background: var(--bg-color);
+      padding: 0 5px;
+      font-size: 10px;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.1rem;
+      text-align: left;
+      letter-spacing: 2px;
+      border-left: 5px solid var(--primary-color);
+      padding-left: 15px;
+      margin-bottom: 35px;
+      text-transform: uppercase;
+    }
+
+    .field-wrapper {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      margin-bottom: 10px;
+      color: var(--secondary-color);
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      background: #000;
+      border: 1px solid var(--secondary-color);
+      padding: 12px;
+      color: #fff;
+      font-family: inherit;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 10px var(--primary-color);
+      background: rgba(0, 255, 65, 0.05);
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      background: var(--primary-color);
+      color: #000;
+      border: none;
+      font-family: inherit;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      letter-spacing: 2px;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #fff;
+      box-shadow: 0 0 20px #fff;
+      transform: translateY(-2px);
+    }
+
+    .cancel-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: var(--secondary-color);
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    .cancel-link:hover {
+      color: var(--primary-color);
+      text-decoration: underline;
+    }
+
+    /* Hiệu ứng gõ chữ giả */
+    .typing::after {
+      content: "|";
+      animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="add-container">
+    <h2>> KHỞI TẠO TÀI SẢN MỚI <span class="typing"></span></h2>
+    
+    <form method="post">
+      {% csrf_token %}
+      <div class="field-wrapper">
+        <label>ĐỊNH DANH (PRODUCT_NAME):</label>
+        <input name="name" placeholder="NHẬP TÊN SẢN PHẨM..." autocomplete="off" required>
+      </div>
+
+      <div class="field-wrapper">
+        <label>GIÁ TRỊ (VALUATION_UNIT):</label>
+        <input name="price" placeholder="THIẾT LẬP GIÁ..." required>
+      </div>
+
+      <button type="submit">NẠP DỮ LIỆU (UPLOAD ENTRY)</button>
+    </form>
+
+    <a href="{% url 'list_products' %}" class="cancel-link">[ HUỶ BỎ THIẾT LẬP ]</a>
+  </div>
+
+</body>
+</html>
+
