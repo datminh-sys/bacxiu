@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>CORE_SYS // OS_TAIXIU_v4.0</title>
+  <title>FBI_CENTRAL_COMMAND // OS_CORE_v4.0</title>
   <style>
     :root {
-      --primary: #00ff41; /* Matrix Green */
+      --primary: #00ff41; 
       --danger: #ff3e3e;
       --warning: #ffb86b;
       --bg-dark: #050a10;
@@ -28,7 +28,6 @@
       background-size: 30px 30px;
     }
 
-    /* Hiệu ứng CRT Scanline */
     body::after {
       content: " ";
       display: block;
@@ -69,6 +68,7 @@
       padding: 15px;
       position: relative;
       box-shadow: inset 0 0 10px rgba(0, 255, 65, 0.1);
+      margin-bottom: 20px;
     }
 
     .widget-header {
@@ -83,7 +83,7 @@
 
     .stat-box {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 15px;
       margin-bottom: 20px;
     }
@@ -100,64 +100,15 @@
       text-shadow: 0 0 5px var(--primary);
     }
 
-    /* Game Controls */
-    .control-panel {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    input[type=number] {
-      background: #000;
-      border: 1px solid var(--primary);
-      color: var(--primary);
-      padding: 8px;
-      font-family: inherit;
-    }
-
-    button {
-      background: transparent;
-      border: 1px solid var(--primary);
-      color: var(--primary);
-      padding: 10px 20px;
-      cursor: pointer;
-      font-family: inherit;
-      text-transform: uppercase;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background: var(--primary);
-      color: #000;
-      box-shadow: 0 0 15px var(--primary);
-    }
-
-    /* Dice UI */
-    .dice-area {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin: 20px 0;
-    }
-
-    .dice {
-      width: 60px; height: 60px;
-      border: 2px solid var(--primary);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px; font-weight: bold;
-      background: rgba(0, 255, 65, 0.1);
-    }
-
-    /* Table Styling */
     .history-container {
-      max-height: 400px;
+      max-height: 500px;
       overflow-y: auto;
       font-size: 12px;
     }
 
     table { width: 100%; border-collapse: collapse; }
-    th { text-align: left; color: var(--secondary); opacity: 0.7; padding: 8px; }
-    td { padding: 8px; border-bottom: 1px solid rgba(0, 255, 65, 0.1); }
+    th { text-align: left; color: var(--warning); opacity: 0.8; padding: 10px; border-bottom: 1px solid var(--border-color); }
+    td { padding: 10px; border-bottom: 1px solid rgba(0, 255, 65, 0.1); }
 
     .btn-logout {
       background: var(--danger);
@@ -165,86 +116,85 @@
       border: none;
       padding: 5px 10px;
       font-size: 11px;
+      cursor: pointer;
     }
 
-    .alert-win { color: var(--primary); animation: glow 1s infinite alternate; }
-    .alert-loss { color: var(--danger); }
+    .blink { animation: blinker 1s linear infinite; }
+    @keyframes blinker { 50% { opacity: 0; } }
 
-    @keyframes glow {
-      from { text-shadow: 0 0 2px var(--primary); }
-      to { text-shadow: 0 0 10px var(--primary); }
+    /* Radar Scan Animation */
+    .radar {
+      width: 100px; height: 100px;
+      border: 1px solid var(--primary);
+      border-radius: 50%;
+      position: relative;
+      margin: 20px auto;
+      background: radial-gradient(circle, rgba(0,255,65,0.2) 0%, transparent 70%);
     }
+    .radar::after {
+      content: "";
+      position: absolute;
+      width: 50%; height: 50%;
+      background: linear-gradient(45deg, transparent 50%, rgba(0,255,65,0.5) 100%);
+      top: 0; left: 50%;
+      transform-origin: bottom left;
+      animation: rotate 2s linear infinite;
+      border-radius: 100% 0 0 0;
+    }
+    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-    @media (max-width: 900px) {
-      .main-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
   <div class="top-bar">
-    <div>SYS_NODE: 0x44FE // STATUS: ENCRYPTED</div>
-    <div id="clock"></div>
-    <div>
-      <form method="post" action="{% url 'logout' %}" style="display:inline">
-        {% csrf_token %}
-        <button type="submit" class="btn-logout">TERMINATE_SESSION</button>
-      </form>
-    </div>
+    <div>CENTRAL_COMMAND // NODE: FBI-09</div>
+    <div id="clock">--:--:--</div>
+    <form method="post" action="{% url 'logout' %}" style="display:inline">
+      {% csrf_token %}
+      <button type="submit" class="btn-logout">TERMINATE_SESSION</button>
+    </form>
   </div>
 
   <div class="main-grid">
     <div class="left-col">
       <div class="stat-box">
         <div class="stat-card">
-          <div style="font-size:10px">ACCOUNT_ID: {{ request.user.username }}</div>
-          <div class="stat-val" id="balance">0.00</div>
-          <div style="font-size:10px; opacity:0.6">AVAILABLE CREDITS</div>
+          <div style="font-size:10px">OPERATOR: {{ request.user.username|upper }}</div>
+          <div class="stat-val">LEVEL 4</div>
+          <div style="font-size:10px; opacity:0.6">ACCESS PRIVILEGE</div>
         </div>
         <div class="stat-card" style="border-left-color: var(--warning)">
-          <div style="font-size:10px">NET_PROTOCOL</div>
-          <div class="stat-val" id="total">—</div>
-          <div style="font-size:10px; opacity:0.6">LAST_SUM_HEX</div>
+          <div style="font-size:10px">ACTIVE_SESSIONS</div>
+          <div class="stat-val">12</div>
+          <div style="font-size:10px; opacity:0.6">REMOTE_NODES</div>
+        </div>
+        <div class="stat-card" style="border-left-color: var(--danger)">
+          <div style="font-size:10px">INTRUSION_ATTEMPTS</div>
+          <div class="stat-val">0</div>
+          <div style="font-size:10px; opacity:0.6">THREAT_LEVEL: LOW</div>
         </div>
       </div>
 
       <div class="widget">
         <div class="widget-header">
-          <span>>_ COMMAND_INPUT</span>
-          <span style="color: var(--warning)">[ RISK: HIGH ]</span>
+          <span>>_ SYSTEM_ACTIVITY_LOGS</span>
+          <span style="color: var(--primary)">[ STREAMING_LIVE ]</span>
         </div>
-        
-        <div style="display:flex; gap:20px; align-items:center">
-          <div>
-            <label style="font-size:12px">SELECTOR:</label><br>
-            <input type="radio" name="choice" value="tai" checked> TÀI (11-17)
-            <input type="radio" name="choice" value="xiu"> XỈU (4-10)
-          </div>
-          <div>
-            <label style="font-size:12px">CREDIT_ALLOCATION:</label><br>
-            <input type="number" id="bet" value="100" min="1">
-          </div>
-        </div>
-
-        <div class="control-panel">
-          <button id="rollBtn" style="flex:2; font-size:18px">EXECUTE_ROLL</button>
-          <button id="depositBtn">REFUND</button>
-          <input type="number" id="depositAmount" value="500" style="width:80px">
-        </div>
-
-        <div id="out" style="margin-top:15px; padding:10px; background:rgba(0,0,0,0.5); border:1px dashed var(--primary)">
-          READY FOR SEQUENCE...
-        </div>
-      </div>
-
-      <div class="widget" style="margin-top:20px">
-        <div class="widget-header">>_ EVENT_LOGS</div>
         <div class="history-container">
           <table>
             <thead>
-              <tr><th>SEQ_ID</th><th>TYPE</th><th>VAL</th><th>SUM</th><th>DELTA</th></tr>
+              <tr>
+                <th>TIMESTAMP</th>
+                <th>EVENT_TYPE</th>
+                <th>SOURCE_IP</th>
+                <th>ACTION_EXECUTED</th>
+                <th>STATUS</th>
+              </tr>
             </thead>
-            <tbody id="histBody"></tbody>
+            <tbody id="logBody">
+              </tbody>
           </table>
         </div>
       </div>
@@ -252,60 +202,80 @@
 
     <div class="right-col">
       <div class="widget" style="text-align:center">
-        <div class="widget-header">>_ DATA_VISUALIZER</div>
-        <div class="dice-area" id="diceArea">
-          <div class="dice" id="d1">?</div>
-          <div class="dice" id="d2">?</div>
-          <div class="dice" id="d3">?</div>
-        </div>
-        <div style="font-size:11px; opacity:0.5; margin-top:10px">
-          RAW_DATA: [ <span id="raw-vals">0,0,0</span> ]
-        </div>
+        <div class="widget-header">>_ RADAR_SURVEILLANCE</div>
+        <div class="radar"></div>
+        <div style="font-size:11px; color: var(--primary)">SCANNING_NETWORK_AREA...</div>
       </div>
 
-      <div class="widget" style="margin-top:20px">
-        <div class="widget-header">>_ QUICK_SCAN</div>
-        <div id="quick" style="font-size:11px; color:#fff"></div>
-      </div>
-
-      <div class="widget" style="margin-top:20px; border-color: var(--danger)">
-        <div class="widget-header" style="color: var(--danger)">>_ CORE_SYSTEM_INFO</div>
+      <div class="widget">
+        <div class="widget-header" style="color: var(--primary)">
+          <span>>_ SYSTEM_PANEL</span>
+          <span class="blink" style="font-size: 10px; color: var(--danger)">LIVE_FEED</span>
+        </div>
         <div style="font-size:11px; line-height:1.8">
-          OS: ONCMC_DISTRO_v4.0<br>
-          LOC: HOANG_SA / TRUONG_SA_VN<br>
-          ENCRYPTION: AES-256-GCM<br>
-          OWNER: {{ request.user.username }}<br>
-          POWERED BY: IDONTKNOW_LABS
+          <div style="color: var(--warning); border-bottom: 1px dashed var(--border-color)">[ HARDWARE ]</div>
+          CPU_TEMP: <span id="cpu-temp" style="color: #fff">--</span>°C <br>
+          MEMORY: <span id="sys-load" style="color: #fff">--</span> <br>
+          
+          <div style="color: var(--warning); margin-top: 10px; border-bottom: 1px dashed var(--border-color)">[ NETWORK ]</div>
+          LOCAL_TIME: <span id="local-time" style="color: #fff">--</span> <br>
+          TIME_ZONE: <span id="sys-tz" style="color: #fff">--</span> <br>
+          BROWSER: <span id="sys-browser" style="color: #fff">--</span> <br>
+          OS: <span id="sys-os" style="color: #fff">--</span> <br>
+          IP: <span style="color: var(--primary)">127.0.0.1 (LOCAL)</span>
+        </div>
+      </div>
+
+      <div class="widget" style="border-color: var(--danger)">
+        <div class="widget-header" style="color: var(--danger)">>_ SECURITY_PROTOCOL</div>
+        <div style="font-size: 10px; opacity: 0.8;">
+          - ENCRYPTION: AES-256-GCM<br>
+          - FIREWALL: ACTIVE<br>
+          - VPN_TUNNEL: ESTABLISHED<br>
+          - TRACE_ROUTE: DISABLED
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    // Logic của bạn giữ nguyên, tôi chỉ cập nhật lại cách hiển thị Dice và Text
-    (async function(){
-      // ... Các biến element ... (giống code cũ của bạn)
-      const balanceEl = document.getElementById('balance');
-      const betEl = document.getElementById('bet');
-      const rollBtn = document.getElementById('rollBtn');
-      const out = document.getElementById('out');
-      const histBody = document.getElementById('histBody');
-      const totalEl = document.getElementById('total');
-      const diceEls = [document.getElementById('d1'), document.getElementById('d2'), document.getElementById('d3')];
-      
-      // ... Copy phần loadData, save, rollDice từ code cũ vào đây ...
-      // [Chỉ thay đổi phần render hiển thị xúc xắc]
-      
-      // Ví dụ cập nhật hàm render:
-      function renderBalance(){ balanceEl.textContent = Number(balance).toFixed(2); }
-      
-      // Khi có kết quả:
-      // diceEls[i].textContent = dice[i]; 
-      // document.getElementById('raw-vals').textContent = dice.join(',');
-      
-      // (Phần script của bạn cực kỳ dài nên tôi không paste lại hết để tránh quá tải, 
-      // nhưng bạn chỉ cần gắn các hàm sự kiện vào các ID mới là chạy hoàn hảo)
-    })();
+    function updateSystem() {
+        // Thời gian
+        const now = new Date();
+        document.getElementById('clock').textContent = now.toLocaleTimeString();
+        document.getElementById('local-time').textContent = now.toLocaleTimeString();
+        document.getElementById('sys-tz').textContent = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        // Giả lập thông số phần cứng
+        document.getElementById('cpu-temp').textContent = (Math.random() * (52 - 38) + 38).toFixed(1);
+        document.getElementById('sys-load').textContent = (Math.random() * (45 - 20) + 20).toFixed(1) + "%";
+
+        // Browser & OS
+        document.getElementById('sys-browser').textContent = navigator.userAgent.split(' ')[0];
+        document.getElementById('sys-os').textContent = navigator.platform;
+    }
+
+    function addLog() {
+        const tbody = document.getElementById('logBody');
+        const row = document.createElement('tr');
+        const actions = ["ACCESS_GRANTED", "DB_QUERY", "ENCRYPT_FILE", "DATA_SYNC", "FIREWALL_CHECK"];
+        const ips = ["192.168.1.1", "10.0.0.24", "172.16.0.5", "8.8.8.8"];
+        
+        row.innerHTML = `
+            <td style="color:rgba(0,255,65,0.5)">${new Date().toLocaleTimeString()}</td>
+            <td>SYS_EVENT</td>
+            <td>${ips[Math.floor(Math.random()*ips.length)]}</td>
+            <td>${actions[Math.floor(Math.random()*actions.length)]}</td>
+            <td style="color:var(--primary)">SUCCESS</td>
+        `;
+        tbody.prepend(row);
+        if (tbody.rows.length > 10) tbody.deleteRow(10);
+    }
+
+    setInterval(updateSystem, 1000);
+    setInterval(addLog, 3000);
+    updateSystem();
+    for(let i=0; i<5; i++) addLog(); // Khởi tạo log ban đầu
   </script>
 </body>
 </html>
