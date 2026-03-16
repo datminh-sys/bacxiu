@@ -1,10 +1,181 @@
-<h2>Danh sách sản phẩm</h2>
-<a href="{% url 'add_product' %}">+ Thêm sản phẩm</a>
-<ul>
-  {% for p in products %}
-    <li>{{ p.name }} - {{ p.price }} 
-      <a href="{% url 'edit_product' p.id %}">Sửa</a> | 
-      <a href="{% url 'delete_product' p.id %}">Xóa</a>
-    </li>
-  {% endfor %}
-</ul>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INTERNAL ASSET MANAGEMENT</title>
+  <style>
+    :root {
+      --primary-color: #00ff41;
+      --danger-color: #ff3e3e;
+      --warning-color: #ffea00;
+      --bg-dark: #080808;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--primary-color);
+      font-family: 'Consolas', 'Courier New', monospace;
+      margin: 0;
+      padding: 30px;
+    }
+
+    .dashboard {
+      max-width: 900px;
+      margin: 0 auto;
+      border: 1px solid var(--primary-color);
+      padding: 20px;
+      background: rgba(0, 20, 0, 0.9);
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.15);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 15px;
+      margin-bottom: 25px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .add-btn {
+      color: var(--bg-dark);
+      background: var(--primary-color);
+      text-decoration: none;
+      padding: 8px 15px;
+      font-weight: bold;
+      font-size: 12px;
+      text-transform: uppercase;
+      transition: 0.3s;
+    }
+
+    .add-btn:hover {
+      background: #fff;
+      box-shadow: 0 0 10px #fff;
+    }
+
+    .asset-list {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .asset-list th {
+      text-align: left;
+      padding: 12px;
+      background: rgba(0, 255, 65, 0.1);
+      font-size: 0.8rem;
+      border: 1px solid var(--primary-color);
+    }
+
+    .asset-list td {
+      padding: 12px;
+      border: 1px solid rgba(0, 255, 65, 0.3);
+      font-size: 0.9rem;
+    }
+
+    .asset-list tr:hover {
+      background: rgba(0, 255, 65, 0.05);
+    }
+
+    /* Các nút hành động */
+    .action-links a {
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 4px 8px;
+      text-transform: uppercase;
+      margin-right: 5px;
+      border: 1px solid transparent;
+    }
+
+    .edit-link {
+      color: var(--warning-color);
+      border-color: var(--warning-color) !important;
+    }
+
+    .edit-link:hover {
+      background: var(--warning-color);
+      color: #000;
+    }
+
+    .delete-link {
+      color: var(--danger-color);
+      border-color: var(--danger-color) !important;
+    }
+
+    .delete-link:hover {
+      background: var(--danger-color);
+      color: #000;
+    }
+
+    .footer-status {
+      margin-top: 20px;
+      font-size: 11px;
+      color: rgba(0, 255, 65, 0.6);
+    }
+
+    /* Hiệu ứng nhấp nháy cho hàng rỗng */
+    .empty-msg {
+      text-align: center;
+      padding: 30px;
+      color: var(--danger-color);
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0.5; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="dashboard">
+  <header>
+    <h2>[ QUẢN LÝ DANH MỤC TANG VẬT ]</h2>
+    <a href="{% url 'add_product' %}" class="add-btn">+ THIẾT LẬP MỚI</a>
+  </header>
+
+  <table class="asset-list">
+    <thead>
+      <tr>
+        <th>MÃ_SỐ</th>
+        <th>ĐỐI_TƯỢNG_HÀNG_HÓA</th>
+        <th>GIÁ_TRỊ_GIAO_DỊCH</th>
+        <th style="text-align: center;">THAO_TÁC_LỆNH</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in products %}
+      <tr>
+        <td style="color: rgba(0,255,65,0.5)">#{{ forloop.counter|stringformat:"03d" }}</td>
+        <td><strong>{{ p.name|upper }}</strong></td>
+        <td>{{ p.price }} <small>CREDITS</small></td>
+        <td class="action-links" style="text-align: center;">
+          <a href="{% url 'edit_product' p.id %}" class="edit-link">[ HIỆU CHỈNH ]</a>
+          <a href="{% url 'delete_product' p.id %}" class="delete-link" onclick="return confirm('XÁC NHẬN HỦY DỮ LIỆU?')">[ TRUY QUÉT ]</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4" class="empty-msg">
+          [ CẢNH BÁO ]: CƠ SỞ DỮ LIỆU RỖNG - KHÔNG TÌM THẤY TÀI SẢN
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="footer-status">
+    >> TERMINAL_ID: 0x{{ products|length }} | STATUS: ENCRYPTED_ACCESS
+  </div>
+</div>
+
+</body>
+</html>
