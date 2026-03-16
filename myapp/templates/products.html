@@ -1,8 +1,160 @@
-html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DATABASE QUERIES - PRODUCTS</title>
+  <style>
+    :root {
+      --primary-color: #00ff41; /* Màu xanh Matrix */
+      --bg-color: #050505;
+      --row-hover: rgba(0, 255, 65, 0.1);
+    }
 
-<h2>Danh sách sản phẩm:</h2>
-<ul>
-  {% for p in products %}
-    <li>{{ p.name }} - {{ p.price }}</li>
-  {% endfor %}
-</ul>
+    body {
+      background-color: var(--bg-color);
+      color: var(--primary-color);
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 40px;
+      line-height: 1.6;
+    }
+
+    /* Hiệu ứng mờ ảo phía sau */
+    body::before {
+      content: "TOP SECRET // LEVEL 5 ACCESS";
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      font-size: 12px;
+      opacity: 0.5;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      border: 1px solid var(--primary-color);
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+      background: rgba(0, 0, 0, 0.9);
+    }
+
+    h2 {
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 10px;
+      margin-top: 0;
+      letter-spacing: 2px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    h2::after {
+      content: "[ STATUS: CONNECTED ]";
+      font-size: 14px;
+      color: #fff;
+      text-shadow: 0 0 5px var(--primary-color);
+    }
+
+    .product-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .product-table th {
+      text-align: left;
+      border-bottom: 1px solid var(--primary-color);
+      padding: 10px;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+    }
+
+    .product-table td {
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(0, 255, 65, 0.1);
+    }
+
+    .product-table tr:hover {
+      background: var(--row-hover);
+      cursor: crosshair;
+    }
+
+    .id-col { color: rgba(0, 255, 65, 0.5); width: 50px; }
+    .price-col { color: #fff; font-weight: bold; text-align: right; }
+
+    /* Hiệu ứng loading giả */
+    .scanline {
+      width: 100%;
+      height: 2px;
+      background: rgba(0, 255, 65, 0.3);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      animation: scan 4s linear infinite;
+    }
+
+    @keyframes scan {
+      0% { top: 0; }
+      100% { top: 100%; }
+    }
+
+    .btn-action {
+      display: inline-block;
+      margin-top: 20px;
+      color: var(--bg-color);
+      background: var(--primary-color);
+      padding: 5px 15px;
+      text-decoration: none;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .btn-action:hover {
+      background: #fff;
+      box-shadow: 0 0 10px #fff;
+    }
+  </style>
+</head>
+<body>
+
+<div class="scanline"></div>
+
+<div class="container">
+  <h2>> TRUY XUẤT DANH MỤC HÀNG HÓA</h2>
+  
+  <table class="product-table">
+    <thead>
+      <tr>
+        <th class="id-col">#ID</th>
+        <th>TÊN_SẢN_PHẨM</th>
+        <th style="text-align: right;">ĐƠN_GIÁ (USD)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in products %}
+      <tr>
+        <td class="id-col">{{ forloop.counter }}</td>
+        <td>{{ p.name|upper }}</td>
+        <td class="price-col">$ {{ p.price }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="3" style="text-align: center; padding: 40px;">
+          [!] KHÔNG CÓ DỮ LIỆU ĐƯỢC TÌM THẤY TRONG DATABASE
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div style="margin-top: 30px; border-top: 1px solid rgba(0,255,65,0.3); padding-top: 10px; font-size: 12px;">
+    SYSTEM_LOG: Đã tải {{ products|length }} bản ghi thành công... <br>
+    <a href="/" class="btn-action">Quay lại Console chính</a>
+  </div>
+</div>
+
+</body>
+</html>
