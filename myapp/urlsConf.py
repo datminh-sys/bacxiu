@@ -22,4 +22,7 @@ urlpatterns = [
     # Game / Dashboard
     path('dashboard/', views.dashboard, name='dashboard'),
     path('api/game-data/', views.game_data_api, name='game_data_api'),
+    #Cloud
+    path('cloud/', views.cloud_index, name='cloud_index'),
+    path('cloud/upload/', views.upload_file, name='upload_file'),
 ]
