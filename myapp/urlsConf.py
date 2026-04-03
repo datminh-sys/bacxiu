@@ -14,4 +14,5 @@ urlpatterns = [
     path('api/game-data/', views.game_data_api, name='game_data_api'),
     path('cloud/', views.cloud_index, name='cloud_index'),
     path('cloud/upload/', views.upload_file, name='upload_file'),
+    path('cloud/delete/<str:file_name>/', views.delete_file, name='delete_file'),
 ]
