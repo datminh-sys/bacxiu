@@ -68,5 +68,16 @@ MEDIA_URL = '/media/'
 
 # ====== WHITELIST NGƯỜI DÙNG ======
 # Thay bằng các username ông muốn cho phép vào Cloud
-CLOUD_WHITELIST = ['admin', 'datminh-sys', 'ban_cua_ong'] 
+CLOUD_WHITELIST = ['own', 'datminh-sys', 'datminh'] 
 LOGIN_URL = 'login'
+# settings.py
+
+# Thư viện này tự động tìm biến môi trường GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE_CONTENTS
+# Nhưng mình nên gán cứng lại một lần nữa cho chắc cú
+GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE_CONTENTS = os.environ.get('GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE_CONTENTS')
+
+# Nếu ông lỡ đặt tên khác trên Render thì dùng dòng này:
+# GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE_CONTENTS = os.environ.get('GOOGLE_DRIVE_KEY_DATA')
+
+DEFAULT_FILE_STORAGE = 'gdstorage.storage.GoogleDriveStorage'
+GOOGLE_DRIVE_STORAGE_MEDIA_ROOT = 'MiniCloud_Data'
