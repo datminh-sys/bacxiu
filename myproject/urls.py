@@ -20,5 +20,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('myapp.urlsConf')),
+    path('cloud/', views.cloud_index, name='cloud_index'),
+    path('cloud/upload/', views.upload_file, name='upload_file'),
 ]
 
