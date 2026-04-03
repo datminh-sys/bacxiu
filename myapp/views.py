@@ -11,23 +11,22 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from functools import wraps
 from django.core.exceptions import PermissionDenied
-from .models import Product  # Đảm bảo đã import model Product
+from .models import Product
 
-# ====== DECORATOR WHITE LIST ======
+# ====== 1. BẢO MẬT (WHITELIST) ======
 def whitelist_required(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
-        # Admin (Superuser) hoặc người trong whitelist mới được vào
         if request.user.is_superuser or request.user.username in getattr(settings, 'CLOUD_WHITELIST', []):
             return view_func(request, *args, **kwargs)
         raise PermissionDenied
     return _wrapped_view
 
-# ====== TRANG CHÍNH ======
+# ====== 2. TRANG CHÍNH ======
 def home(request):
     return render(request, 'home.html')
 
-# ====== QUẢN LÝ SẢN PHẨM (ĐÃ KHÔI PHỤC ĐẦY ĐỦ) ======
+# ====== 3. QUẢN LÝ SẢN PHẨM ======
 def list_products(request):
     products = Product.objects.all()
     return render(request, 'list_products.html', {'products': products})
@@ -56,7 +55,19 @@ def delete_product(request, product_id):
         return redirect('list_products')
     return render(request, 'delete_product.html', {'product': product})
 
-# ====== TÀI KHOẢN ======
+# ====== 4. TÀI KHOẢN (ĐÃ THÊM REGISTER) ======
+def register(request):
+    if request.method == 'POST':
+        u = request.POST.get('username')
+        p = request.POST.get('password')
+        if User.objects.filter(username=u).exists():
+            messages.error(request, 'Tên tài khoản đã tồn tại!')
+        else:
+            User.objects.create_user(username=u, password=p)
+            messages.success(request, 'Tạo tài khoản thành công!')
+            return redirect('login')
+    return render(request, 'register.html')
+
 def user_login(request):
     if request.method == 'POST':
         u = request.POST.get('username')
@@ -76,13 +87,11 @@ def user_logout(request):
 def dashboard(request):
     return render(request, 'dashboard.html')
 
-# ====== MINI CLOUD (LƯU TRỮ 2TB GOOGLE DRIVE) ======
+# ====== 5. MINI CLOUD (GOOGLE DRIVE 2TB) ======
 @login_required
 @whitelist_required
 def cloud_index(request):
-    """Liệt kê file từ Google Drive"""
     try:
-        # listdir trả về (directories, files)
         _, files = default_storage.listdir('')
         file_data = []
         for f in files:
@@ -93,19 +102,17 @@ def cloud_index(request):
             })
         return render(request, 'cloud_home.html', {'files': file_data})
     except Exception as e:
-        return HttpResponse(f"Lỗi truy cập Drive: {e}")
+        return HttpResponse(f"Lỗi Drive: {e}")
 
 @login_required
 @whitelist_required
 def upload_file(request):
-    """Xử lý upload file thẳng lên Drive"""
     if request.method == 'POST' and request.FILES.get('myfile'):
         myfile = request.FILES['myfile']
-        filename = default_storage.save(myfile.name, myfile)
-        messages.success(request, f'Đã lưu thành công: {filename}')
+        default_storage.save(myfile.name, myfile)
     return redirect('cloud_index')
 
-# ====== GAME DATA API (LƯU JSON LÊN DRIVE ĐỂ KHÔNG MẤT DỮ LIỆU) ======
+# ====== 6. GAME DATA API (LƯU LÊN DRIVE) ======
 @login_required
 def game_data_api(request):
     username = request.user.username
@@ -115,7 +122,6 @@ def game_data_api(request):
         try:
             data = json.loads(request.body)
             content = json.dumps(data, ensure_ascii=False, indent=4)
-            # Xóa file cũ nếu tồn tại để cập nhật
             if default_storage.exists(file_path):
                 default_storage.delete(file_path)
             default_storage.save(file_path, ContentFile(content))
