@@ -92,8 +92,11 @@
     th { text-align: left; color: var(--warning); padding: 10px; border-bottom: 1px solid var(--border-color); font-size: 12px; }
     td { padding: 10px; border-bottom: 1px solid rgba(0, 255, 65, 0.1); font-size: 13px; }
     
-    .file-link { color: var(--primary); text-decoration: none; border: 1px solid transparent; padding: 2px 5px; }
+    .file-link { color: var(--primary); text-decoration: none; border: 1px solid transparent; padding: 2px 8px; transition: 0.2s; }
     .file-link:hover { background: var(--primary); color: #000; box-shadow: 0 0 10px var(--primary); }
+    
+    .btn-delete { color: var(--danger); }
+    .btn-delete:hover { background: var(--danger); color: #fff; box-shadow: 0 0 10px var(--danger); }
 
     /* Nút bấm kiểu Cyber */
     .btn-action {
@@ -181,8 +184,8 @@
               <tr>
                 <th>FILE_NAME</th>
                 <th>SIZE</th>
-                <th>ENCRYPTION</th>
-                <th>ACTION</th>
+                <th>TYPE</th>
+                <th>ACTIONS</th>
               </tr>
             </thead>
             <tbody>
@@ -190,9 +193,17 @@
               <tr>
                 <td>{{ file.name }}</td>
                 <td>{{ file.size|filesizeformat }}</td>
-                <td style="color: var(--primary)">AES-256</td>
+                <td style="color: var(--primary)">SECURE_BLOB</td>
                 <td>
-                  <a href="{{ file.url }}" class="file-link" target="_blank">ACCESS_DATA</a>
+                  <a href="{{ file.url }}" class="file-link" target="_blank" download>
+                    [ DOWNLOAD ]
+                  </a>
+                  
+                  <a href="{% url 'delete_file' file.name %}" 
+                     class="file-link btn-delete" 
+                     onclick="return confirm('WARNING: TIÊU HỦY VĨNH VIỄN DỮ LIỆU NÀY?')">
+                    [ TERMINATE ]
+                  </a>
                 </td>
               </tr>
               {% empty %}
