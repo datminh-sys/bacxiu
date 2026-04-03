@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import json
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -137,3 +138,12 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Lấy nội dung file JSON từ biến môi trường (Lát nữa sẽ cài trên Render)
+GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE_CONTENTS = os.getenv('GOOGLE_DRIVE_KEY_DATA')
+
+# Bảo Django dùng Google Drive làm kho chứa thay vì ổ cứng server
+DEFAULT_FILE_STORAGE = 'gdstorage.storage.GoogleDriveStorage'
+
+# Thư mục trên Drive mà ông muốn lưu (Tên folder ông đã share cho Bot)
+GOOGLE_DRIVE_STORAGE_MEDIA_ROOT = 'MiniCloud_Data'
