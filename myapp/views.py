@@ -89,3 +89,11 @@ def game_data_api(request):
             with default_storage.open(file_path, 'r') as f:
                 return JsonResponse(json.load(f))
         return JsonResponse({'balance': 1000, 'history': []})
+@login_required
+@whitelist_required
+def upload_file(request):
+    if request.method == 'POST' and request.FILES['myfile']:
+        myfile = request.FILES['myfile']
+        filename = default_storage.save(myfile.name, myfile)
+        messages.success(request, f'Đã upload: {filename}')
+    return redirect('cloud_index')
