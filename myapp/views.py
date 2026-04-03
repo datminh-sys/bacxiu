@@ -134,3 +134,14 @@ def game_data_api(request):
             with default_storage.open(file_path, 'r') as f:
                 return JsonResponse(json.load(f))
         return JsonResponse({'balance': 1000, 'history': []})
+#
+@login_required
+@whitelist_required
+def delete_file(request, file_name):
+    """Xóa file trên Google Drive"""
+    if default_storage.exists(file_name):
+        default_storage.delete(file_name)
+        messages.success(request, f'Đã tiêu hủy dữ liệu: {file_name}')
+    else:
+        messages.error(request, 'Không tìm thấy tệp tin!')
+    return redirect('cloud_index')
