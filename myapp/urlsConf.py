@@ -19,7 +19,7 @@ urlpatterns = [
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
 
-    # Game / Dashboard
+    # Game / Dashboar
     path('dashboard/', views.dashboard, name='dashboard'),
     path('api/game-data/', views.game_data_api, name='game_data_api'),
     #Cloud
