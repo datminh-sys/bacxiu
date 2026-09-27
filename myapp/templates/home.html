@@ -1,190 +1,175 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TERMINAL ACCESS // AUTHORIZATION REQUIRED</title>
-  <style>
-    :root {
-      --primary-color: #00ff41;
-      --bg-color: #000;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Chủ - Hệ Thống Của Bạn</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Courier New', Courier, monospace;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    body {
-      height: 100vh;
-      background-color: var(--bg-color);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      color: var(--primary-color);
-    }
+        /* Navbar */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-    /* Hiệu ứng màng lọc màn hình cũ */
-    body::after {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                  linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
-      background-size: 100% 3px, 3px 100%;
-      pointer-events: none;
-      z-index: 10;
-    }
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 1;
-      opacity: 0.3;
-    }
+        .logo i {
+            color: #3b82f6;
+        }
 
-    .content {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      background: rgba(0, 0, 0, 0.8);
-      padding: 40px;
-      border: 1px solid var(--primary-color);
-      box-shadow: 0 0 20px var(--primary-color);
-    }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
 
-    .status-code {
-      font-size: 12px;
-      letter-spacing: 5px;
-      margin-bottom: 10px;
-      opacity: 0.7;
-    }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
 
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 30px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      border-right: 3px solid var(--primary-color);
-      white-space: nowrap;
-      overflow: hidden;
-      width: 0;
-      animation: typing 2s steps(30, end) forwards, blink-caret 0.75s step-end infinite;
-    }
+        .btn-outline {
+            background: transparent;
+            color: #f8fafc;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
 
-    @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
-    }
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
 
-    @keyframes blink-caret {
-      from, to { border-color: transparent }
-      50% { border-color: var(--primary-color) }
-    }
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
 
-    .btn-access {
-      display: inline-block;
-      text-decoration: none;
-      font-size: 1.2rem;
-      padding: 15px 50px;
-      border: 1px solid var(--primary-color);
-      color: var(--primary-color);
-      font-weight: bold;
-      text-transform: uppercase;
-      transition: 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
+        .btn-primary:hover {
+            background: #2563eb;
+        }
 
-    .btn-access:hover {
-      background: var(--primary-color);
-      color: #000;
-      box-shadow: 0 0 30px var(--primary-color);
-    }
+        /* Hero Section */
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-    .warning-msg {
-      margin-top: 25px;
-      font-size: 10px;
-      color: #ff3e3e;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
 
-    /* Hiệu ứng khung ngắm (Scanner) */
-    .scanner-corners {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      right: 20px;
-      bottom: 20px;
-      border: 1px solid rgba(0, 255, 65, 0.1);
-      pointer-events: none;
-    }
-  </style>
+        .hero h1 span {
+            color: #3b82f6;
+        }
+
+        .hero p {
+            color: #94a3b8;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 13px;
+            color: #64748b;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        @media (max-width: 600px) {
+            header { padding: 15px 20px; }
+            .hero h1 { font-size: 32px; }
+            .hero-actions { flex-direction: column; width: 100%; }
+            .hero-actions a { width: 100%; text-align: center; }
+        }
+    </style>
 </head>
 <body>
 
-  <canvas id="matrix"></canvas>
+    <!-- Thanh điều hướng -->
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-cube"></i> NCP Corporation
+        </div>
+        <div class="nav-links">
+            <a href="login.html" class="btn btn-outline">Đăng Nhập</a>
+            <a href="register.html" class="btn btn-primary">Đăng Ký</a>
+        </div>
+    </header>
 
-  <div class="content">
-    <div class="status-code">ID_NODE: 09-ONCMC-SYS</div>
-    <h1>> TRUY CẬP HỆ THỐNG...</h1>
-    
-    <a href="{% url 'dashboard' %}" class="btn-access">
-      Xác thực quyền
-    </a>
-
-    <div class="warning-msg">
-      Cảnh báo: Mọi hoạt động đang được ghi lại bởi log của server.
+    <!-- Phần chính -->
+    <div class="hero">
+        <h1>Nền tảng hiện đại giúp bạn <span>tối ưu hóa công việc</span></h1>
+        <p>Khám phá các giải pháp tối ưu, giao diện mượt mà và bảo mật tuyệt đối cho doanh nghiệp số. Trải nghiệm hệ thống hoàn toàn mới ngay hôm nay.</p>
+        <div class="hero-actions">
+            <a href="register.html" class="btn btn-primary" style="padding: 14px 28px; font-size: 16px;">Bắt Đầu Ngay</a>
+            <a href="login.html" class="btn btn-outline" style="padding: 14px 28px; font-size: 16px;">Khám Phá Thêm</a>
+        </div>
     </div>
-  </div>
 
-  <script>
-    // Hiệu ứng Matrix Rain
-    const canvas = document.getElementById('matrix');
-    const ctx = canvas.getContext('2d');
+    <!-- Chân trang -->
+    <footer>
+        &copy; 2026 NCP Corporation/NCP Vietnam Co.,Ltd. All rights reserved.
+	</footer>
+	<footer>
+		&copysr; 2026 NCP Corporation, under exclusive license to NCP Vietnam Co.,Ltd
+	</footer>
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%";
-    const fontSize = 14;
-    const columns = canvas.width / fontSize;
-    const drops = [];
-
-    for (let i = 0; i < columns; i++) {
-      drops[i] = 1;
-    }
-
-    function drawMatrix() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = "#00ff41";
-      ctx.font = fontSize + "px Courier New";
-
-      for (let i = 0; i < drops.length; i++) {
-        const text = letters.charAt(Math.floor(Math.random() * letters.length));
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i]++;
-      }
-    }
-
-    setInterval(drawMatrix, 50);
-
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-  </script>
 </body>
 </html>
