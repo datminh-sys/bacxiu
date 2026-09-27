@@ -1,160 +1,256 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DATABASE QUERIES - PRODUCTS</title>
-  <style>
-    :root {
-      --primary-color: #00ff41; /* Màu xanh Matrix */
-      --bg-color: #050505;
-      --row-hover: rgba(0, 255, 65, 0.1);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Điều Khoản Dịch Vụ & EULA - BrandName Music Distribution</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      background-color: var(--bg-color);
-      color: var(--primary-color);
-      font-family: 'Courier New', Courier, monospace;
-      margin: 0;
-      padding: 40px;
-      line-height: 1.6;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    /* Hiệu ứng mờ ảo phía sau */
-    body::before {
-      content: "TOP SECRET // LEVEL 5 ACCESS";
-      position: fixed;
-      top: 10px;
-      right: 20px;
-      font-size: 12px;
-      opacity: 0.5;
-    }
+        /* Navbar */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      border: 1px solid var(--primary-color);
-      padding: 20px;
-      box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
-      background: rgba(0, 0, 0, 0.9);
-    }
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
 
-    h2 {
-      text-transform: uppercase;
-      border-bottom: 2px solid var(--primary-color);
-      padding-bottom: 10px;
-      margin-top: 0;
-      letter-spacing: 2px;
-      display: flex;
-      justify-content: space-between;
-    }
+        .logo i {
+            color: #3b82f6;
+        }
 
-    h2::after {
-      content: "[ STATUS: CONNECTED ]";
-      font-size: 14px;
-      color: #fff;
-      text-shadow: 0 0 5px var(--primary-color);
-    }
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
 
-    .product-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
 
-    .product-table th {
-      text-align: left;
-      border-bottom: 1px solid var(--primary-color);
-      padding: 10px;
-      text-transform: uppercase;
-      font-size: 0.9rem;
-    }
+        .btn-outline {
+            background: transparent;
+            color: #f8fafc;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
 
-    .product-table td {
-      padding: 12px 10px;
-      border-bottom: 1px solid rgba(0, 255, 65, 0.1);
-    }
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
 
-    .product-table tr:hover {
-      background: var(--row-hover);
-      cursor: crosshair;
-    }
+        /* Main Container */
+        .main-container {
+            max-width: 900px;
+            width: 100%;
+            margin: 40px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
 
-    .id-col { color: rgba(0, 255, 65, 0.5); width: 50px; }
-    .price-col { color: #fff; font-weight: bold; text-align: right; }
+        .legal-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            animation: fadeIn 0.8s ease-in-out;
+        }
 
-    /* Hiệu ứng loading giả */
-    .scanline {
-      width: 100%;
-      height: 2px;
-      background: rgba(0, 255, 65, 0.3);
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 100;
-      animation: scan 4s linear infinite;
-    }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    @keyframes scan {
-      0% { top: 0; }
-      100% { top: 100%; }
-    }
+        .legal-header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 25px;
+        }
 
-    .btn-action {
-      display: inline-block;
-      margin-top: 20px;
-      color: var(--bg-color);
-      background: var(--primary-color);
-      padding: 5px 15px;
-      text-decoration: none;
-      font-weight: bold;
-      text-transform: uppercase;
-      font-size: 12px;
-    }
+        .legal-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
 
-    .btn-action:hover {
-      background: #fff;
-      box-shadow: 0 0 10px #fff;
-    }
-  </style>
+        .legal-header p {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* Content Sections */
+        .legal-section {
+            margin-bottom: 30px;
+        }
+
+        .legal-section h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #3b82f6;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legal-section p, .legal-section li {
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        .legal-section ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .legal-section li {
+            margin-bottom: 6px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 13px;
+            color: #64748b;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: auto;
+        }
+
+        @media (max-width: 600px) {
+            header { padding: 15px 20px; }
+            .legal-card { padding: 25px 20px; }
+            .legal-header h1 { font-size: 24px; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="scanline"></div>
+    <!-- Thanh điều hướng -->
+    <header>
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-cube"></i> BrandName
+        </a>
+        <div class="nav-links">
+            <a href="index.html" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> Trang Chủ</a>
+        </div>
+    </header>
 
-<div class="container">
-  <h2>> TRUY XUẤT DANH MỤC HÀNG HÓA</h2>
-  
-  <table class="product-table">
-    <thead>
-      <tr>
-        <th class="id-col">#ID</th>
-        <th>TÊN_SẢN_PHẨM</th>
-        <th style="text-align: right;">ĐƠN_GIÁ (USD)</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for p in products %}
-      <tr>
-        <td class="id-col">{{ forloop.counter }}</td>
-        <td>{{ p.name|upper }}</td>
-        <td class="price-col">$ {{ p.price }}</td>
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan="3" style="text-align: center; padding: 40px;">
-          [!] KHÔNG CÓ DỮ LIỆU ĐƯỢC TÌM THẤY TRONG DATABASE
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    <!-- Nội dung chính -->
+    <div class="main-container">
+        <div class="legal-card">
+            <div class="legal-header">
+                <h1>Điều Khoản Dịch Vụ & EULA</h1>
+                <p>Cập nhật lần cuối: Ngày 27 tháng 09, 2026 - Dành cho dịch vụ Phân phối Âm nhạc</p>
+            </div>
 
-  <div style="margin-top: 30px; border-top: 1px solid rgba(0,255,65,0.3); padding-top: 10px; font-size: 12px;">
-    SYSTEM_LOG: Đã tải {{ products|length }} bản ghi thành công... <br>
-    <a href="/" class="btn-action">Quay lại Console chính</a>
-  </div>
-</div>
+            <div class="legal-section">
+                <h2><i class="fa-solid fa-circle-check"></i> 1. Giới thiệu & Định nghĩa</h2>
+                <p>Chào mừng bạn đến với nền tảng phân phối âm nhạc của NCP Corporation. Bằng việc tải lên (upload), phân phối hoặc sử dụng bất kỳ dịch vụ nào của chúng tôi để đưa bản thu âm và tác phẩm âm nhạc của bạn lên các nền tảng nhạc số (Spotify, Apple Music, TikTok, YouTube Music, v.v.), bạn đồng ý tuân theo các Điều khoản Dịch vụ và Thỏa thuận Cấp phép Người dùng Cuối (EULA) này.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2><i class="fa-solid fa-music"></i> 2. Quyền sở hữu trí tuệ & Bản quyền (Copyright)</h2>
+                <p>Chúng tôi tôn trọng tuyệt đối quyền sở hữu trí tuệ. Khi sử dụng dịch vụ của NCP Corporation, bạn cam kết và đảm bảo rằng:</p>
+                <ul>
+                    <li><strong>Quyền sở hữu hợp pháp:</strong> Bạn là chủ sở hữu hoặc đã được cấp phép hợp pháp toàn bộ quyền đối với Âm thanh (Sound Recording) và Tác phẩm âm nhạc (Composition/Lyrics) mà bạn phân phối.</li>
+                    <li><strong>Không xâm phạm bản quyền:</strong> Sản phẩm âm nhạc của bạn không chứa các mẫu âm thanh (sample), giai điệu hoặc lời bài hát vi phạm bản quyền của bên thứ ba chưa được cấp phép.</li>
+                    <li><strong>Trách nhiệm pháp lý:</strong> Bạn chịu hoàn toàn trách nhiệm pháp lý nếu xảy ra tranh chấp bản quyền đối với sản phẩm âm nhạc do bạn tải lên hệ thống.</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2><i class="fa-solid fa-share-nodes"></i> 3. Cấp phép phân phối (Distribution License)</h2>
+                <p>Để chúng tôi đưa nhạc của bạn lên các cửa hàng trực tuyến, bạn cấp cho NCP Corporation quyền hạn không độc quyền (non-exclusive) trong thời hạn thỏa thuận để:</p>
+                <ul>
+                    <li>Phân phối, phát trực tuyến (streaming), tải xuống và hiển thị các bản ghi âm, artwork (ảnh bìa) và metadata của bạn trên các nền tảng đối tác số toàn cầu.</li>
+                    <li>Sử dụng tên nghệ sĩ, hình ảnh đại diện, tiểu sử và artwork của bạn cho các mục đích quảng bá, tiếp thị liên quan đến dịch vụ phân phối của NCP Corporation.</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2><i class="fa-solid fa-wallet"></i> 4. Doanh thu, Phí dịch vụ & Thanh toán</h2>
+                <p>Quy định về tài chính đối với nghệ sĩ/hãng đĩa:</p>
+                <ul>
+                    <li><strong>Tỷ lệ ăn chia (Royalty Split):</strong> Bạn sẽ nhận được phần trăm doanh thu thực tế được báo cáo từ các nền tảng nhạc số sau khi trừ đi các khoản phí (nếu có) theo gói dịch vụ bạn đã đăng ký.</li>
+                    <li><strong>Rút tiền:</strong> Bạn có quyền yêu cầu rút tiền bản quyền khi số dư đạt mức tối thiểu theo quy định của hệ thống.</li>
+                    <li><strong>Phát hiện gian lận (Fraudulent Streams):</strong> Nếu các cửa hàng phát hiện hoặc nghi ngờ hành vi gian lận lượt nghe (stream giả mạo, bot stream), doanh thu từ các nguồn đó sẽ bị giữ lại hoặc thu hồi, đồng thời tài khoản của bạn có thể bị khóa vĩnh viễn.</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2><i class="fa-solid fa-ban"></i> 5. Nội dung bị cấm & Vi phạm</h2>
+                <p>Nghiêm cấm tải lên các nội dung âm nhạc sau đây:</p>
+                <ul>
+                    <li>Âm thanh tạo ra hoàn toàn bằng AI vi phạm bản quyền nghệ sĩ gốc hoặc nội dung vi phạm thuần phong mỹ tục, pháp luật quốc gia.</li>
+                    <li>Sử dụng các thủ thuật tăng view/stream ảo thông qua các dịch vụ bên thứ ba không chính thống.</li>
+                    <li>Các bản ghi âm có chứa nội dung kích động bạo lực, thù hận, hoặc vi phạm chính sách của các cửa hàng nhạc số (DSP).</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2><i class="fa-solid fa-triangle-exclamation"></i> 6. Chấm dứt dịch vụ & Gỡ nhạc (Takedown)</h2>
+                <p>Bạn có quyền yêu cầu gỡ bỏ âm nhạc (Takedown request) khỏi hệ thống phân phối bất cứ lúc nào thông qua trang quản trị tài khoản. Chúng tôi cũng có quyền từ chối phân phối hoặc tự động gỡ bỏ bất kỳ bài hát nào nếu nhận được khiếu nại bản quyền hợp pháp từ bên thứ ba hoặc phát hiện vi phạm điều khoản.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2><i class="fa-solid fa-envelope"></i> 7. Hỗ trợ pháp lý & Bản quyền</h2>
+                <p>Nếu bạn có khiếu nại bản quyền hoặc cần giải đáp thắc mắc về phân phối âm nhạc, vui lòng liên hệ bộ phận pháp lý của chúng tôi tại: <strong style="color: #3b82f6;">copyright@ncp.vn</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chân trang -->
+    <footer>
+        &copy; 2026 BrandName. All rights reserved.
+    </footer>
 
 </body>
 </html>
