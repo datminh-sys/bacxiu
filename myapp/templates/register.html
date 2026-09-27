@@ -182,7 +182,30 @@
             <p>Tham gia ngay để trải nghiệm đầy đủ các tính năng</p>
         </div>
 
-        <form onsubmit="event.preventDefault(); alert('Đăng ký tài khoản thành công!');">
+          <form onsubmit="event.preventDefault(); alert('Đăng kí thành công!'); window.location.href='/login';">
+            <div class="form-group">
+                <label>Email của bạn</label>
+                <div class="input-box">
+                    <i class="fa-regular fa-envelope"></i>
+                    <input type="email" placeholder="name@example.com" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Mật khẩu</label>
+                <div class="input-box">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" placeholder="••••••••" required>
+                </div>
+            </div>
+
+            <div class="form-options">
+                <label><input type="checkbox"> Nhớ tài khoản</label>
+                <a href="#">Quên mật khẩu?</a>
+            </div>
+
+            <button type="submit" class="btn-submit">Đăng Nhập</button>
+        </form>
             <div class="form-group">
                 <label>Họ và tên</label>
                 <div class="input-box">
@@ -208,14 +231,14 @@
             </div>
 
             <div class="terms">
-                <input type="checkbox" required> Tôi đồng ý với <a href="products">Điều khoản dịch vụ</a>
+                <input type="checkbox" required> Tôi đồng ý với <a href="/products">Điều khoản dịch vụ</a>
             </div>
 
             <button type="submit" class="btn-submit">Đăng Ký</button>
         </form>
 
         <div class="auth-footer">
-            Đã có tài khoản? <a href="login">Đăng nhập</a>
+            Đã có tài khoản? <a href="/login">Đăng nhập</a>
         </div>
     </div>
 
