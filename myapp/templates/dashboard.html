@@ -1,281 +1,312 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>FBI_CENTRAL_COMMAND // OS_CORE_v4.0</title>
-  <style>
-    :root {
-      --primary: #00ff41; 
-      --danger: #ff3e3e;
-      --warning: #ffb86b;
-      --bg-dark: #050a10;
-      --card-bg: rgba(10, 20, 35, 0.8);
-      --border-color: #003b00;
-      --font-main: 'Consolas', 'Monaco', 'Courier New', monospace;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống đang bảo trì</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-4">
 
-    * { box-sizing: border-box; }
+    <div class="max-w-md w-full bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-2xl shadow-2xl p-8 text-center relative overflow-hidden">
+        
+        <!-- Hiệu ứng trang trí nền mờ -->
+        <div class="absolute -top-12 -right-12 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl"></div>
+        <div class="absolute -bottom-12 -left-12 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
+
+        <!-- Icon bảo trì -->
+        <div class="w-20 h-20 bg-indigo-500/10 text-indigo-400 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-indigo-500/20 shadow-inner">
+            <i class="fa-solid fa-screwdriver-wrench text-3xl animate-bounce"></i>
+        </div>
+
+        <!-- Tiêu đề -->
+        <h1 class="text-2xl font-bold tracking-tight mb-3">Website Đang Bảo Trì</h1>
+        
+        <!-- Nội dung thông báo -->
+        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+            Chúng tôi đang tiến hành nâng cấp hệ thống để mang lại trải nghiệm tốt hơn. Rất xin lỗi vì sự bất tiện này và mong quý khách quay lại sau ít năm nữa.
+        </p>
+
+        <!-- Đồng hồ đếm ngược -->
+        <div class="grid grid-cols-3 gap-3 mb-6 bg-slate-900/50 p-4 rounded-xl border border-slate-700/40">
+            <div>
+                <span id="hours" class="text-xl font-bold text-indigo-400">05</span>
+                <span class="block text-xs text-slate-500 uppercase tracking-wider mt-1">Năm</span>
+            </div>
+            <div>
+                <span id="minutes" class="text-xl font-bold text-indigo-400">4</span>
+                <span class="block text-xs text-slate-500 uppercase tracking-wider mt-1">Tháng</span>
+            </div>
+            <div>
+                <span id="seconds" class="text-xl font-bold text-indigo-400">30</span>
+                <span class="block text-xs text-slate-500 uppercase tracking-wider mt-1">Ngày</span>
+            </div>
+        </div>
+
+        <!-- Liên hệ / Hỗ trợ -->
+        <div class="pt-4 border-t border-slate-700/50 text-xs text-slate-500">
+            Cần hỗ trợ khẩn cấp? Liên hệ qua email: 
+            <a href="mailto:support@hostmail.vn" class="text-indigo-400 hover:underline font-medium">support@hostmail.vn</a>
+        </div>
+    </div>
+
+    <!-- Script đếm ngược giả lập (Có thể chỉnh sửa) -->
+    <script>
+        // Thời gian đếm ngược tính bằng giây (Ví dụ: 2 giờ 45 phút)
+        let totalSeconds = 2 * 3600 + 45 * 60 + 30;
+
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+
+        const timer = setInterval(() => {
+            if (totalSeconds <= 0) {
+                clearInterval(timer);
+                return;
+            }
+            totalSeconds--;
+
+            const h = Math.floor(totalSeconds / 3600);
+            const m = Math.floor((totalSeconds % 3600) / 60);
+            const s = totalSeconds % 60;
+
+            hoursEl.textContent = String(h).padStart(2, '0');
+            minutesEl.textContent = String(m).padStartDưới đây là một mẫu mã nguồn HTML hoàn chỉnh cho trang web thông báo bảo trì (Maintenance Page) với thiết kế hiện đại, giao diện tối giản, chuyên nghiệp và có tích hợp hiệu ứng đếm ngược thời gian (countdown timer) cùng nút thông báo khi website hoạt động trở lại.
+
+Bạn có thể lưu đoạn mã dưới đây thành một file có tên là `index.html`:
+
+```html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website đang bảo trì</title>
+    <!-- Google Fonts -->
+    <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap)" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)">
     
-    body {
-      margin: 0;
-      background-color: var(--bg-dark);
-      color: var(--primary);
-      font-family: var(--font-main);
-      background-image: 
-        linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
-      background-size: 30px 30px;
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body::after {
-      content: " ";
-      display: block;
-      position: fixed;
-      top: 0; left: 0; bottom: 0; right: 0;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
-                  linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
-      z-index: 9999;
-      pointer-events: none;
-      background-size: 100% 2px, 3px 100%;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-    .top-bar {
-      height: 40px;
-      background: #000;
-      border-bottom: 1px solid var(--primary);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 20px;
-      font-size: 12px;
-      text-transform: uppercase;
-      box-shadow: 0 0 10px var(--primary);
-    }
+        .maintenance-container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            animation: fadeIn 0.8s ease-in-out;
+        }
 
-    .main-grid {
-      display: grid;
-      grid-template-columns: 1fr 350px;
-      gap: 20px;
-      max-width: 1400px;
-      margin: 20px auto;
-      padding: 0 20px;
-    }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    .widget {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      padding: 15px;
-      position: relative;
-      box-shadow: inset 0 0 10px rgba(0, 255, 65, 0.1);
-      margin-bottom: 20px;
-    }
+        .icon-box {
+            width: 80px;
+            height: 80px;
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 24px;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
 
-    .widget-header {
-      font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 15px;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 5px;
-      display: flex;
-      justify-content: space-between;
-    }
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
 
-    .stat-box {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
-    }
+        p {
+            color: #94a3b8;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
 
-    .stat-card {
-      background: rgba(0,0,0,0.5);
-      border-left: 3px solid var(--primary);
-      padding: 10px;
-    }
+        /* Đồng hồ đếm ngược */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 35px;
+        }
 
-    .stat-val {
-      font-size: 24px;
-      color: #fff;
-      text-shadow: 0 0 5px var(--primary);
-    }
+        .time-box {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px 15px;
+            border-radius: 12px;
+            min-width: 75px;
+        }
 
-    .history-container {
-      max-height: 500px;
-      overflow-y: auto;
-      font-size: 12px;
-    }
+        .time-box span {
+            display: block;
+            font-size: 24px;
+            font-weight: 700;
+            color: #3b82f6;
+        }
 
-    table { width: 100%; border-collapse: collapse; }
-    th { text-align: left; color: var(--warning); opacity: 0.8; padding: 10px; border-bottom: 1px solid var(--border-color); }
-    td { padding: 10px; border-bottom: 1px solid rgba(0, 255, 65, 0.1); }
+        .time-box label {
+            font-size: 12px;
+            color: #64748b;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
 
-    .btn-logout {
-      background: var(--danger);
-      color: #fff;
-      border: none;
-      padding: 5px 10px;
-      font-size: 11px;
-      cursor: pointer;
-    }
+        /* Form đăng ký nhận thông báo */
+        .notify-form {
+            display: flex;
+            gap: 10px;
+            max-width: 450px;
+            margin: 0 auto;
+        }
 
-    .blink { animation: blinker 1s linear infinite; }
-    @keyframes blinker { 50% { opacity: 0; } }
+        .notify-form input {
+            flex: 1;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
 
-    /* Radar Scan Animation */
-    .radar {
-      width: 100px; height: 100px;
-      border: 1px solid var(--primary);
-      border-radius: 50%;
-      position: relative;
-      margin: 20px auto;
-      background: radial-gradient(circle, rgba(0,255,65,0.2) 0%, transparent 70%);
-    }
-    .radar::after {
-      content: "";
-      position: absolute;
-      width: 50%; height: 50%;
-      background: linear-gradient(45deg, transparent 50%, rgba(0,255,65,0.5) 100%);
-      top: 0; left: 50%;
-      transform-origin: bottom left;
-      animation: rotate 2s linear infinite;
-      border-radius: 100% 0 0 0;
-    }
-    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .notify-form input:focus {
+            border-color: #3b82f6;
+        }
 
-    @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
-  </style>
+        .notify-form button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .notify-form button:hover {
+            background: #2563eb;
+        }
+
+        /* Footer nhỏ */
+        .footer {
+            margin-top: 30px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        /* Responsive cho thiết bị di động */
+        @media (max-width: 480px) {
+            .notify-form {
+                flex-direction: column;
+            }
+            .countdown {
+                gap: 8px;
+            }
+            .time-box {
+                min-width: 60px;
+                padding: 10px 8px;
+            }
+            .time-box span {
+                font-size: 18px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <div class="top-bar">
-    <div>CENTRAL_COMMAND // NODE: FBI-09</div>
-    <div id="clock">--:--:--</div>
-    <form method="post" action="{% url 'logout' %}" style="display:inline">
-      {% csrf_token %}
-      <button type="submit" class="btn-logout">TERMINATE_SESSION</button>
-    </form>
-  </div>
-
-  <div class="main-grid">
-    <div class="left-col">
-      <div class="stat-box">
-        <div class="stat-card">
-          <div style="font-size:10px">OPERATOR: {{ request.user.username|upper }}</div>
-          <div class="stat-val">LEVEL 4</div>
-          <div style="font-size:10px; opacity:0.6">ACCESS PRIVILEGE</div>
+    <div class="maintenance-container">
+        <div class="icon-box">
+            <i class="fa-solid fa-gears fa-spin"></i>
         </div>
-        <div class="stat-card" style="border-left-color: var(--warning)">
-          <div style="font-size:10px">ACTIVE_SESSIONS</div>
-          <div class="stat-val">12</div>
-          <div style="font-size:10px; opacity:0.6">REMOTE_NODES</div>
-        </div>
-        <div class="stat-card" style="border-left-color: var(--danger)">
-          <div style="font-size:10px">INTRUSION_ATTEMPTS</div>
-          <div class="stat-val">0</div>
-          <div style="font-size:10px; opacity:0.6">THREAT_LEVEL: LOW</div>
-        </div>
-      </div>
-
-      <div class="widget">
-        <div class="widget-header">
-          <span>>_ SYSTEM_ACTIVITY_LOGS</span>
-          <span style="color: var(--primary)">[ STREAMING_LIVE ]</span>
-        </div>
-        <div class="history-container">
-          <table>
-            <thead>
-              <tr>
-                <th>TIMESTAMP</th>
-                <th>EVENT_TYPE</th>
-                <th>SOURCE_IP</th>
-                <th>ACTION_EXECUTED</th>
-                <th>STATUS</th>
-              </tr>
-            </thead>
-            <tbody id="logBody">
-              </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="right-col">
-      <div class="widget" style="text-align:center">
-        <div class="widget-header">>_ RADAR_SURVEILLANCE</div>
-        <div class="radar"></div>
-        <div style="font-size:11px; color: var(--primary)">SCANNING_NETWORK_AREA...</div>
-      </div>
-
-      <div class="widget">
-        <div class="widget-header" style="color: var(--primary)">
-          <span>>_ SYSTEM_PANEL</span>
-          <span class="blink" style="font-size: 10px; color: var(--danger)">LIVE_FEED</span>
-        </div>
-        <div style="font-size:11px; line-height:1.8">
-          <div style="color: var(--warning); border-bottom: 1px dashed var(--border-color)">[ HARDWARE ]</div>
-          CPU_TEMP: <span id="cpu-temp" style="color: #fff">--</span>°C <br>
-          MEMORY: <span id="sys-load" style="color: #fff">--</span> <br>
-          
-          <div style="color: var(--warning); margin-top: 10px; border-bottom: 1px dashed var(--border-color)">[ NETWORK ]</div>
-          LOCAL_TIME: <span id="local-time" style="color: #fff">--</span> <br>
-          TIME_ZONE: <span id="sys-tz" style="color: #fff">--</span> <br>
-          BROWSER: <span id="sys-browser" style="color: #fff">--</span> <br>
-          OS: <span id="sys-os" style="color: #fff">--</span> <br>
-          IP: <span style="color: var(--primary)">127.0.0.1 (LOCAL)</span>
-        </div>
-      </div>
-
-      <div class="widget" style="border-color: var(--danger)">
-        <div class="widget-header" style="color: var(--danger)">>_ SECURITY_PROTOCOL</div>
-        <div style="font-size: 10px; opacity: 0.8;">
-          - ENCRYPTION: AES-256-GCM<br>
-          - FIREWALL: ACTIVE<br>
-          - VPN_TUNNEL: ESTABLISHED<br>
-          - TRACE_ROUTE: DISABLED
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    function updateSystem() {
-        // Thời gian
-        const now = new Date();
-        document.getElementById('clock').textContent = now.toLocaleTimeString();
-        document.getElementById('local-time').textContent = now.toLocaleTimeString();
-        document.getElementById('sys-tz').textContent = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-        // Giả lập thông số phần cứng
-        document.getElementById('cpu-temp').textContent = (Math.random() * (52 - 38) + 38).toFixed(1);
-        document.getElementById('sys-load').textContent = (Math.random() * (45 - 20) + 20).toFixed(1) + "%";
-
-        // Browser & OS
-        document.getElementById('sys-browser').textContent = navigator.userAgent.split(' ')[0];
-        document.getElementById('sys-os').textContent = navigator.platform;
-    }
-
-    function addLog() {
-        const tbody = document.getElementById('logBody');
-        const row = document.createElement('tr');
-        const actions = ["ACCESS_GRANTED", "DB_QUERY", "ENCRYPT_FILE", "DATA_SYNC", "FIREWALL_CHECK"];
-        const ips = ["192.168.1.1", "10.0.0.24", "172.16.0.5", "8.8.8.8"];
         
-        row.innerHTML = `
-            <td style="color:rgba(0,255,65,0.5)">${new Date().toLocaleTimeString()}</td>
-            <td>SYS_EVENT</td>
-            <td>${ips[Math.floor(Math.random()*ips.length)]}</td>
-            <td>${actions[Math.floor(Math.random()*actions.length)]}</td>
-            <td style="color:var(--primary)">SUCCESS</td>
-        `;
-        tbody.prepend(row);
-        if (tbody.rows.length > 10) tbody.deleteRow(10);
-    }
+        <h1>Hệ Thống Đang Bảo Trì</h1>
+        <p>Chúng tôi đang tiến hành nâng cấp hệ thống để mang lại trải nghiệm tốt hơn. Website sẽ sớm hoạt động trở lại. Xin lỗi vì sự bất tiện này!</p>
 
-    setInterval(updateSystem, 1000);
-    setInterval(addLog, 3000);
-    updateSystem();
-    for(let i=0; i<5; i++) addLog(); // Khởi tạo log ban đầu
-  </script>
+        <!-- Đồng hồ đếm ngược (Ví dụ đếm ngược 5 tiếng nữa) -->
+        <div class="countdown" id="countdown">
+            <div class="time-box">
+                <span id="hours">04</span>
+                <label>Giờ</label>
+            </div>
+            <div class="time-box">
+                <span id="minutes">59</span>
+                <label>Phút</label>
+            </div>
+            <div class="time-box">
+                <span id="seconds">30</span>
+                <label>Giây</label>
+            </div>
+        </div>
+
+        <!-- Form nhập email nhận thông báo -->
+        <form class="notify-form" onsubmit="event.preventDefault(); alert('Cảm ơn bạn! Chúng tôi sẽ gửi thông báo ngay khi hệ thống mở lại.');">
+            <input type="email" placeholder="Nhập email của bạn..." required>
+            <button type="submit">Nhận thông báo</button>
+        </form>
+
+        <div class="footer">
+            &copy; 2026 Tên Website Của Bạn. All rights reserved.
+        </div>
+    </div>
+
+    <script>
+        // Thiết lập thời gian đếm ngược (Ví dụ: 5 tiếng từ lúc tải trang)
+        let timeInSeconds = 5 * 3600 + 45 * 60;
+
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+
+        function updateCountdown() {
+            if (timeInSeconds <= 0) return;
+            
+            timeInSeconds--;
+            
+            const hours = Math.floor(timeInSeconds / 3600);
+            const minutes = Math.floor((timeInSeconds % 3600) / 60);
+            const seconds = timeInSeconds % 60;
+
+            hoursEl.textContent = String(hours).padStart(2, '0');
+            minutesEl.textContent = String(minutes).padStart(2, '0');
+            secondsEl.textContent = String(seconds).padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+    </script>
 </body>
 </html>
