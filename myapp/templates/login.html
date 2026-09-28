@@ -189,12 +189,15 @@
             <p>Đăng nhập để tiếp tục truy cập vào hệ thống</p>
         </div>
 
-      <form onsubmit="event.preventDefault(); alert('Đăng nhập thành công!'); window.location.href='/dashboard';">
+        <!-- Form được cấu hình gửi POST lên server, hỗ trợ Django qua {% csrf_token %} -->
+        <form method="POST" action="">
+            {% csrf_token %}
+            
             <div class="form-group">
                 <label>Email của bạn</label>
                 <div class="input-box">
                     <i class="fa-regular fa-envelope"></i>
-                    <input type="email" placeholder="name@example.com" required>
+                    <input type="email" name="username" placeholder="name@example.com" required>
                 </div>
             </div>
 
@@ -202,12 +205,12 @@
                 <label>Mật khẩu</label>
                 <div class="input-box">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" placeholder="••••••••" required>
+                    <input type="password" name="password" placeholder="••••••••" required>
                 </div>
             </div>
 
             <div class="form-options">
-                <label><input type="checkbox"> Nhớ tài khoản</label>
+                <label><input type="checkbox" name="remember"> Nhớ tài khoản</label>
                 <a href="#">Quên mật khẩu?</a>
             </div>
 
@@ -221,4 +224,3 @@
 
 </body>
 </html>
-	
