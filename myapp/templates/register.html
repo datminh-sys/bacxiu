@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng Ký - Hệ Thống</title>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://googleapis.com" rel="stylesheet">
     <!-- FontAwesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -182,9 +182,9 @@
             <p>Tham gia ngay để trải nghiệm đầy đủ các tính năng</p>
         </div>
 
-          <form onsubmit="event.preventDefault(); alert('Đăng kí thành công!'); window.location.href='/login';">
+        <!-- Biểu mẫu bắt đầu tại đây -->
+        <form onsubmit="event.preventDefault(); alert('Đăng kí thành công!'); window.location.href='/login';">
             
-        </form>
             <div class="form-group">
                 <label>Họ và tên</label>
                 <div class="input-box">
@@ -215,6 +215,7 @@
 
             <button type="submit" class="btn-submit">Đăng Ký</button>
         </form>
+        <!-- Biểu mẫu kết thúc hợp lý sau nút submit -->
 
         <div class="auth-footer">
             Đã có tài khoản? <a href="/login">Đăng nhập</a>
