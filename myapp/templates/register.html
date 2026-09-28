@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng Ký - Hệ Thống</title>
     <!-- Google Fonts -->
-    <link href="https://googleapis.com" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -173,7 +173,7 @@
 <body>
 
     <div class="auth-container">
-        <a href="/home" class="back-home">
+        <a href="/" class="back-home">
             <i class="fa-solid fa-arrow-left"></i> Về trang chủ
         </a>
 
@@ -182,14 +182,16 @@
             <p>Tham gia ngay để trải nghiệm đầy đủ các tính năng</p>
         </div>
 
-        <!-- Biểu mẫu bắt đầu tại đây -->
-        <form onsubmit="event.preventDefault(); alert('Đăng kí thành công!'); window.location.href='/login';">
+        <!-- THAY ĐỔI QUAN TRỌNG: Form dùng method="POST" và thêm CSRF Token -->
+        <form method="POST" action="">
+            {% csrf_token %}
             
             <div class="form-group">
-                <label>Họ và tên</label>
+                <label>Tên đăng nhập</label>
                 <div class="input-box">
                     <i class="fa-regular fa-user"></i>
-                    <input type="text" placeholder="Nguyễn Văn A" required>
+                    <!-- THÊM name="username" ĐỂ KHỚP VỚI VIEWS.PY -->
+                    <input type="text" name="username" placeholder="Nhập tên đăng nhập (ví dụ: nguyenvanA)" required>
                 </div>
             </div>
 
@@ -197,7 +199,8 @@
                 <label>Email của bạn</label>
                 <div class="input-box">
                     <i class="fa-regular fa-envelope"></i>
-                    <input type="email" placeholder="name@example.com" required>
+                    <!-- THÊM name="email" -->
+                    <input type="email" name="email" placeholder="name@example.com" required>
                 </div>
             </div>
 
@@ -205,7 +208,8 @@
                 <label>Mật khẩu</label>
                 <div class="input-box">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" placeholder="••••••••" required>
+                    <!-- THÊM name="password" ĐỂ KHỚP VỚI VIEWS.PY -->
+                    <input type="password" name="password" placeholder="••••••••" required>
                 </div>
             </div>
 
@@ -215,7 +219,6 @@
 
             <button type="submit" class="btn-submit">Đăng Ký</button>
         </form>
-        <!-- Biểu mẫu kết thúc hợp lý sau nút submit -->
 
         <div class="auth-footer">
             Đã có tài khoản? <a href="/login">Đăng nhập</a>
