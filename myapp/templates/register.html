@@ -181,7 +181,13 @@
             <h1>Tạo Tài Khoản</h1>
             <p>Tham gia ngay để trải nghiệm đầy đủ các tính năng</p>
         </div>
-
+{% if messages %}
+    <div style="color: #fca5a5; background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; padding: 12px; border-radius: 10px; margin-bottom: 20px; text-align: center; font-size: 14px;">
+        {% for message in messages %}
+            {{ message }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
         <!-- THAY ĐỔI QUAN TRỌNG: Form dùng method="POST" và thêm CSRF Token -->
         <form method="POST" action="">
             {% csrf_token %}
