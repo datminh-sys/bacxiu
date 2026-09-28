@@ -19,8 +19,7 @@ def home(request):
     return render(request, 'home.html')
 
 
-
-# ====== 4. TÀI KHOẢN (ĐÃ THÊM REGISTER) ======
+# ====== 4. TÀI KHOẢN (ĐÃ TỐI ƯU HÓA LOGIN) ======
 def register(request):
     if request.method == 'POST':
         u = request.POST.get('username')
@@ -37,11 +36,26 @@ def user_login(request):
     if request.method == 'POST':
         u = request.POST.get('username')
         p = request.POST.get('password')
-        user = authenticate(username=u, password=p)
-        if user:
+        
+        # Thử xác thực trực tiếp bằng username
+        user = authenticate(request, username=u, password=p)
+        
+        # Nếu không được, thử xem người dùng nhập email thay cho username hay không
+        if user is None:
+            try:
+                matched_user = User.objects.get(email=u)
+                user = authenticate(request, username=matched_user.username, password=p)
+            except User.DoesNotExist:
+                user = None
+
+        if user is not None:
             login(request, user)
-            return redirect('dashboard')
-        messages.error(request, 'Sai tài khoản hoặc mật khẩu!')
+            # Lấy tham số next nếu có, không thì mặc định vào dashboard
+            next_url = request.GET.get('next', 'dashboard')
+            return redirect(next_url)
+        else:
+            messages.error(request, 'Sai tài khoản hoặc mật khẩu!')
+            
     return render(request, 'login.html')
 
 def user_logout(request):
@@ -52,18 +66,14 @@ def user_logout(request):
 def products(request):
     # Lấy toàn bộ sản phẩm từ database
     all_products = Product.objects.all() 
-    # Truyền danh sách sản phẩm vào file HTML (ví dụ: products.html)
     return render(request, 'products.html', {'products': all_products})
-# Thêm tiếp đoạn này vào dưới cùng file myapp/views.py
+
 def add_product(request):
     if request.method == 'POST':
         # Logic xử lý thêm sản phẩm của bạn ở đây
         pass
     return render(request, 'add_product.html')
 
-
-
 @login_required
 def dashboard(request):
     return render(request, 'dashboard.html')
-
