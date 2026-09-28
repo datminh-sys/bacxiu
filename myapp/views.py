@@ -48,6 +48,21 @@ def user_logout(request):
     logout(request)
     return redirect('login')
 
+
+def products(request):
+    # Lấy toàn bộ sản phẩm từ database
+    all_products = Product.objects.all() 
+    # Truyền danh sách sản phẩm vào file HTML (ví dụ: products.html)
+    return render(request, 'products.html', {'products': all_products})
+# Thêm tiếp đoạn này vào dưới cùng file myapp/views.py
+def add_product(request):
+    if request.method == 'POST':
+        # Logic xử lý thêm sản phẩm của bạn ở đây
+        pass
+    return render(request, 'add_product.html')
+
+
+
 @login_required
 def dashboard(request):
     return render(request, 'dashboard.html')
