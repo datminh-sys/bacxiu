@@ -13,14 +13,6 @@ from functools import wraps
 from django.core.exceptions import PermissionDenied
 from .models import Product
 
-# ====== 1. BẢO MẬT (WHITELIST) ======
-def whitelist_required(view_func):
-    @wraps(view_func)
-    def _wrapped_view(request, *args, **kwargs):
-        if request.user.is_superuser or request.user.username in getattr(settings, 'CLOUD_WHITELIST', []):
-            return view_func(request, *args, **kwargs)
-        raise PermissionDenied
-    return _wrapped_view
 
 # ====== 2. TRANG CHÍNH ======
 def home(request):
