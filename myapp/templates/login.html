@@ -188,7 +188,13 @@
             <h1>Chào Mừng Trở Lại</h1>
             <p>Đăng nhập để tiếp tục truy cập vào hệ thống</p>
         </div>
-
+{% if messages %}
+    <div style="color: #fca5a5; background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; padding: 12px; border-radius: 10px; margin-bottom: 20px; text-align: center; font-size: 14px;">
+        {% for message in messages %}
+            {{ message }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
         <!-- Form được cấu hình gửi POST lên server, hỗ trợ Django qua {% csrf_token %} -->
         <form method="POST" action="">
             {% csrf_token %}
